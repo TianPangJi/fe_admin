@@ -37,11 +37,11 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/jkb/api': {
-        target: 'http://lts.com/',
+      '/dev/api': {
+        target: 'http://127.0.0.1:8769/',
         changeOrigin: true,
         pathRewrite: {
-          '^/jkb/api': ''
+          '^/dev/api': ''
         }
       }
     },

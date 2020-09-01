@@ -1,24 +1,26 @@
 import request from '@/utils/request'
 
+// 用户登录
 export function login(data) {
   return request({
-    url: '/vue-element-admin/user/login',
+    url: '/oauth/login/',
     method: 'post',
     data
   })
 }
 
-export function getInfo(token) {
+//获取当前登录用户信息
+export function getInfo() {
   return request({
-    url: '/vue-element-admin/user/info',
-    method: 'get',
-    params: { token }
+    url: '/oauth/info/',
+    method: 'get'
   })
 }
 
+// 用户登出
 export function logout() {
   return request({
-    url: '/vue-element-admin/user/logout',
+    url: '/oauth/logout/',
     method: 'post'
   })
 }
