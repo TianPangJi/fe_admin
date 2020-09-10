@@ -28,8 +28,8 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
       // 判断当前用户是否已拉取完user_info信息
-      const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      if (hasRoles) {
+      const hasUserIds = store.getters.userId && store.getters.userId > 0
+      if (hasUserIds) {
         next()
       } else {
         try {
@@ -40,7 +40,7 @@ router.beforeEach(async(to, from, next) => {
           router.addRoutes(accessRoutes)
 
           // hack方法以确保addRoutes是完整的
-          //设置replace：true，因此导航不会留下历史记录
+          // 设置replace：true，因此导航不会留下历史记录
           next({ ...to, replace: true })
         } catch (error) {
           // 删除token并进入登录页面重新登录

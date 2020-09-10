@@ -4,12 +4,12 @@ import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  userId:'',
+  userId: '',
   name: '',
-  username:'',
-  email:'',
+  username: '',
+  email: '',
   avatar: '',
-  permissions:[]
+  permissions: []
 }
 
 const mutations = {
@@ -33,7 +33,7 @@ const mutations = {
   },
   SET_PERMISSIONS: (state, permissions) => {
     state.permissions = permissions
-  },
+  }
 }
 
 const actions = {
@@ -57,12 +57,11 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo().then(response => {
         const data = response.data
-        console.log('response.data', response.data);
+        console.log('response.data', response.data)
         if (!data) {
           reject('验证失败，请重新登录')
         }
         const { id, username, name, avatar, email, permissions } = data
-
         commit('SET_USERID', id)
         commit('SET_NAME', name)
         commit('SET_USERNAME', username)
@@ -82,6 +81,7 @@ const actions = {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
         commit('SET_PERMISSIONS', [])
+        commit('SET_USERID', '')
         removeToken()
         resetRouter()
 
@@ -101,6 +101,7 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       commit('SET_PERMISSIONS', [])
+      commit('SET_USERID', '')
       removeToken()
       resolve()
     })

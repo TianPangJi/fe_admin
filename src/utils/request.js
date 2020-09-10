@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import router from '@/router'
+import { Message, detailBox } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -15,7 +16,7 @@ service.interceptors.request.use(
   config => {
     if (store.getters.token) {
       // 让每个请求携带自定义token
-      config.headers['Authorization'] = "Bearer " + getToken()
+      config.headers['Authorization'] = 'Bearer ' + getToken()
     }
     config.headers['Content-Type'] = 'application/json'
     return config
