@@ -9,7 +9,7 @@ export function login(data) {
   })
 }
 
-//获取当前登录用户信息
+// 获取当前登录用户信息
 export function getInfo() {
   return request({
     url: '/oauth/info/',

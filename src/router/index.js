@@ -14,7 +14,7 @@ Vue.use(Router)
  * redirect: noRedirect           如果设置noRedirect，则不会在面包屑中重定向
  * name:'router-name'             该名称由<keep-alive>使用（必须设置！！！）
  * meta : {
-    roles: ['admin','editor']    控制页面角色（您可以设置多个角色）
+    permissions: ['admin','editor']    控制页面权限
     title: 'title'               名称显示在侧边栏和面包屑中（推荐设置）
     icon: 'svg-name'/'el-icon-x' 侧栏中的图标显示
     noCache: true                如果设置为true，将不缓存页面（默认为false）
@@ -47,11 +47,6 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
-  },
-  {
     path: '/404',
     component: () => import('@/views/error-page/404'),
     hidden: true
@@ -70,7 +65,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: '主页', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -93,9 +88,41 @@ export const constantRoutes = [
 
 /**
  * asyncRoutes
- * 需要根据用户角色动态加载的路由
+ * 需要根据用户权限动态加载的路由
  */
 export const asyncRoutes = [
+  // 系统管理
+  {
+    path: '/system',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'system',
+    meta: {
+      title: '系统管理',
+      icon: 'system'
+    },
+    children: [
+      {
+        path: 'users',
+        component: () => import('@/views/system/users'),
+        name: 'users',
+        meta: { title: '用户管理', noCache: true }
+      },
+      {
+        path: 'line',
+        component: () => import('@/views/charts/line'),
+        name: 'LineChart',
+        meta: { title: 'Line Chart', noCache: true }
+      },
+      {
+        path: 'mix-chart',
+        component: () => import('@/views/charts/mix-chart'),
+        name: 'MixChart',
+        meta: { title: 'Mix Chart', noCache: true }
+      }
+    ]
+  },
+
   {
     path: '/icon',
     component: Layout,

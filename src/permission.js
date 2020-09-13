@@ -55,10 +55,10 @@ router.beforeEach(async(to, from, next) => {
     /* has no token*/
 
     if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
+      // 在免登录白名单中，直接进入
       next()
     } else {
-      // other pages that do not have permission to access are redirected to the login page.
+      // 其他无权访问的页面将被重定向到登录页面
       next(`/login?redirect=${to.path}`)
       NProgress.done()
     }
@@ -66,6 +66,6 @@ router.beforeEach(async(to, from, next) => {
 })
 
 router.afterEach(() => {
-  // finish progress bar
+  // 完成进度栏
   NProgress.done()
 })
