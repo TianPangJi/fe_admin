@@ -106,19 +106,19 @@ export const asyncRoutes = [
         path: 'users',
         component: () => import('@/views/system/users'),
         name: 'users',
-        meta: { title: '用户管理', noCache: true }
+        meta: { title: '用户管理', icon: 'user', noCache: true }
       },
       {
         path: 'line',
         component: () => import('@/views/charts/line'),
         name: 'LineChart',
-        meta: { title: 'Line Chart', noCache: true }
+        meta: { title: '角色管理', icon: 'role', noCache: true }
       },
       {
         path: 'mix-chart',
         component: () => import('@/views/charts/mix-chart'),
         name: 'MixChart',
-        meta: { title: 'Mix Chart', noCache: true }
+        meta: { title: '权限管理', icon: 'permission', noCache: true }
       }
     ]
   },

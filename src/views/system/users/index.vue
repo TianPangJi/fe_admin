@@ -19,12 +19,13 @@
           </el-form-item>
         </el-form>
         <el-button type="primary" icon="el-icon-plus" size="medium" @click="createUser(form)">新增</el-button>
-        <el-button type="success" icon="el-icon-edit" size="medium" @click="updateUser(form)">修改</el-button>
-        <el-button type="danger" icon="el-icon-delete" size="medium" @click="deleteUsers(form)">删除</el-button>
-        <!-- <el-button type="warning" icon="el-icon-download" size="medium" @click="reset(form)">导出</el-button> -->
+        <el-button type="success" icon="el-icon-edit" :disabled="multipleSelection.length===1 ? false : true" size="medium" @click="updateUser(form)">修改</el-button>
+        <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteUsers(form)">删除</el-button>
         <el-table
+          ref="multipleTable"
           :data="tableData"
           style="width: 100%"
+          @selection-change="handleSelectionChange"
         >
           <el-table-column
             type="selection"
@@ -63,11 +64,14 @@
             width="100"
           >
             <template slot-scope="{row}">
+              <!-- v-model="row.is_active" -->
               <el-switch
                 v-model="row.is_active"
+                :active-value="true"
+                :inactive-value="false"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
-                @change="changeIsActive(row)"
+                @change="changeIsActive($event, row)"
               />
             </template>
           </el-table-column>
@@ -99,7 +103,7 @@
 </template>
 
 <script>
-import { getUsers, updateUserActive, deleteUser } from '@/api/system/users'
+import { getUsers, updateUserActive, deleteUser, deleteUsers } from '@/api/system/users'
 export default {
   name: 'User',
   data() {
@@ -112,7 +116,8 @@ export default {
         ordering: 'id'
       },
       tableData: [],
-      total: 0
+      total: 0,
+      multipleSelection: [] // 已选择的用户id数组
     }
   },
   created() {
@@ -132,8 +137,8 @@ export default {
       this.search()
     },
     // 修改用户状态
-    changeIsActive(row) {
-      const message = row.is_active ? '激活' : '锁定'
+    changeIsActive(event, row) {
+      const message = !event ? '锁定' : '激活'
       this.$confirm('此操作将' + message + '用户 "' + row.username + '" , 是否继续？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -170,9 +175,30 @@ export default {
       })
     },
 
+    // table选择功能的change事件
+    handleSelectionChange() {
+      const deleteIds = []
+      this.$refs.multipleTable.selection.forEach(data => deleteIds.push(data.id))
+      this.multipleSelection = deleteIds
+      console.log(this.multipleSelection)
+    },
+
     // 批量删除用户
     deleteUsers() {
-
+      this.$confirm('此操作将删除用户' + ', 是否继续？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteUsers({ 'ids': this.multipleSelection }).then(res => {
+          this.$message({
+            message: '删除用户成功',
+            type: 'success'
+          })
+          // 刷新table
+          this.search()
+        })
+      })
     },
 
     // 分页

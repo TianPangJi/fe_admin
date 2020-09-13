@@ -1,6 +1,6 @@
 import axios from 'axios'
 import router from '@/router'
-import { Message, detailBox } from 'element-ui'
+import { Message, detailBox, Notification } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -46,7 +46,7 @@ service.interceptors.response.use(
   error => {
     let code = 0
     try {
-      code = error.response.data.status
+      code = error.response.status
     } catch (e) {
       if (error.toString().indexOf('timeout')) {
         Message({
@@ -57,6 +57,7 @@ service.interceptors.response.use(
         return Promise.reject(error)
       }
     }
+    debugger
     if (code === 401) {
       detailBox.confirm(
         '登录状态过期了哦，您可以继续留在该页面，或者重新登录',
@@ -73,20 +74,28 @@ service.interceptors.response.use(
       })
     } else if (code === 403) {
       router.push({ path: '/401' })
+    } else if (code === 400) {
+      const errorMsg = error.response.data.errors
+      Message({
+        message: errorMsg || '服务端错误',
+        type: 'error',
+        duration: 3 * 1000
+      })
     } else if (code === 502) {
       Notification.error({
         title: '错误',
         message: '后端服务器连接失败!'
       })
+    } else if (code === 500) {
+      Notification.error({
+        title: '错误',
+        message: '服务端错误!'
+      })
     } else {
-      const errorMsg = error.response.data.errors
-      if (errorMsg !== undefined) {
-        Message({
-          message: errorMsg,
-          type: 'error',
-          duration: 3 * 1000
-        })
-      }
+      Notification.error({
+        title: '错误',
+        message: '服务端未知错误!'
+      })
     }
     return Promise.reject(error)
   }
