@@ -1,11 +1,22 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-col :span="4">111</el-col>
+      <el-col :span="4">
+        <el-input v-model="filterText" style="width:260px; margin-bottom: 20px;" prefix-icon="el-icon-search" placeholder="输入部门名称搜索" />
+
+        <el-tree
+          ref="tree"
+          class="filter-tree"
+          :data="data"
+          :props="defaultProps"
+          :filter-node-method="filterNode"
+        />
+
+      </el-col>
       <el-col :span="20">
         <el-form ref="form" :model="form" inline>
           <el-form-item prop="search">
-            <el-input v-model="form.search" style="width:300px" placeholder="输入用户名、姓名、手机号、邮箱搜索" />
+            <el-input v-model="form.search" style="width:300px" prefix-icon="el-icon-search" placeholder="输入用户名、姓名、手机号、邮箱搜索" />
           </el-form-item>
           <el-form-item prop="is_active">
             <el-select v-model="form.is_active" style="width:100px" clearable placeholder="状态">
@@ -50,7 +61,7 @@
             width="180"
           />
           <el-table-column
-            prop="department"
+            prop="department_name"
             label="部门"
           />
           <el-table-column
@@ -104,6 +115,7 @@
 
 <script>
 import { getUsers, updateUserActive, deleteUser, deleteUsers } from '@/api/system/users'
+import { getDepartments } from '@/api/system/departments'
 export default {
   name: 'User',
   data() {
@@ -117,13 +129,36 @@ export default {
       },
       tableData: [],
       total: 0,
-      multipleSelection: [] // 已选择的用户id数组
+      multipleSelection: [], // 已选择的用户id数组
+      filterText: '',
+      data: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      }
+    }
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val)
     }
   },
   created() {
     this.search()
+    this.getDepartments()
   },
   methods: {
+    // 部门Tree过滤方法
+    filterNode(value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
+    },
+    // 获取部门Tree结构
+    getDepartments() {
+      getDepartments().then(res => {
+        this.data = res.data.results
+      })
+    },
     // 获取用户列表/搜索功能
     search() {
       getUsers(this.form).then(res => {
