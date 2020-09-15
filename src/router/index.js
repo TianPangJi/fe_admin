@@ -110,19 +110,20 @@ export const asyncRoutes = [
       },
       {
         path: 'line',
-        component: () => import('@/views/charts/line'),
+        component: () => import('@/views/system/users'),
         name: 'LineChart',
         meta: { title: '角色管理', icon: 'role', noCache: true }
       },
       {
         path: 'mix-chart',
-        component: () => import('@/views/charts/mix-chart'),
+        component: () => import('@/views/system/users'),
         name: 'MixChart',
         meta: { title: '权限管理', icon: 'permission', noCache: true }
       }
     ]
   },
 
+  // icon
   {
     path: '/icon',
     component: Layout,
@@ -132,38 +133,6 @@ export const asyncRoutes = [
         component: () => import('@/views/icons/index'),
         name: 'Icons',
         meta: { title: 'Icons', icon: 'icon', noCache: true }
-      }
-    ]
-  },
-
-  // echarts
-  {
-    path: '/charts',
-    component: Layout,
-    redirect: 'noRedirect',
-    name: 'Charts',
-    meta: {
-      title: 'Charts',
-      icon: 'chart'
-    },
-    children: [
-      {
-        path: 'keyboard',
-        component: () => import('@/views/charts/keyboard'),
-        name: 'KeyboardChart',
-        meta: { title: 'Keyboard Chart', noCache: true }
-      },
-      {
-        path: 'line',
-        component: () => import('@/views/charts/line'),
-        name: 'LineChart',
-        meta: { title: 'Line Chart', noCache: true }
-      },
-      {
-        path: 'mix-chart',
-        component: () => import('@/views/charts/mix-chart'),
-        name: 'MixChart',
-        meta: { title: 'Mix Chart', noCache: true }
       }
     ]
   },

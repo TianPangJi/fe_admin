@@ -9,7 +9,9 @@
           class="filter-tree"
           :data="data"
           :props="defaultProps"
+          :expand-on-click-node="false"
           :filter-node-method="filterNode"
+          @node-click="handleNodeClick"
         />
 
       </el-col>
@@ -125,7 +127,8 @@ export default {
         size: 10,
         search: '',
         is_active: '',
-        ordering: 'id'
+        ordering: 'id',
+        department_id: ''
       },
       tableData: [],
       total: 0,
@@ -159,6 +162,11 @@ export default {
         this.data = res.data.results
       })
     },
+    // 过滤部门下的用户列表
+    handleNodeClick(data) {
+      this.form.department_id = data.id
+      this.search()
+    },
     // 获取用户列表/搜索功能
     search() {
       getUsers(this.form).then(res => {
@@ -169,6 +177,8 @@ export default {
     // 重置
     resetForm() {
       this.$refs.form.resetFields()
+      // form中未使用department_id字段需手动清除
+      this.form.department_id = ''
       this.search()
     },
     // 修改用户状态
