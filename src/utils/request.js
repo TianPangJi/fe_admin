@@ -57,7 +57,6 @@ service.interceptors.response.use(
         return Promise.reject(error)
       }
     }
-    debugger
     if (code === 401) {
       detailBox.confirm(
         '登录状态过期了哦，您可以继续留在该页面，或者重新登录',

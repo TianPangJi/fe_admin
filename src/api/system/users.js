@@ -53,3 +53,10 @@ export function getUsers(data) {
   })
 }
 
+// 获取用户详情
+export function getUser(id) {
+  return request({
+    url: `/system/users/${id}/`,
+    method: 'get'
+  })
+}

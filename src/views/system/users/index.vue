@@ -2,8 +2,7 @@
   <div class="app-container">
     <el-row>
       <el-col :span="4">
-        <el-input v-model="filterText" style="width:260px; margin-bottom: 20px;" prefix-icon="el-icon-search" placeholder="输入部门名称搜索" />
-
+        <el-input v-model="filterText" clearable style="width:260px; margin-bottom: 20px;" prefix-icon="el-icon-search" placeholder="输入部门名称搜索" />
         <el-tree
           ref="tree"
           class="filter-tree"
@@ -13,12 +12,11 @@
           :filter-node-method="filterNode"
           @node-click="handleNodeClick"
         />
-
       </el-col>
       <el-col :span="20">
         <el-form ref="form" :model="form" inline>
           <el-form-item prop="search">
-            <el-input v-model="form.search" style="width:300px" prefix-icon="el-icon-search" placeholder="输入用户名、姓名、手机号、邮箱搜索" />
+            <el-input v-model="form.search" clearable style="width:300px" prefix-icon="el-icon-search" placeholder="输入用户名、姓名、手机号、邮箱搜索" />
           </el-form-item>
           <el-form-item prop="is_active">
             <el-select v-model="form.is_active" style="width:100px" clearable placeholder="状态">
@@ -31,7 +29,7 @@
             <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
           </el-form-item>
         </el-form>
-        <el-button type="primary" icon="el-icon-plus" size="medium" @click="createUser(form)">新增</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="medium" @click="createUser()">新增</el-button>
         <el-button type="success" icon="el-icon-edit" :disabled="multipleSelection.length===1 ? false : true" size="medium" @click="updateUser(form)">修改</el-button>
         <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteUsers(form)">删除</el-button>
         <el-table
@@ -80,6 +78,7 @@
               <!-- v-model="row.is_active" -->
               <el-switch
                 v-model="row.is_active"
+                :disabled="row.id === userId"
                 :active-value="true"
                 :inactive-value="false"
                 active-color="#13ce66"
@@ -94,12 +93,13 @@
             label="操作"
             width="220"
           >
-            <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateUser(scope.row)">编辑</el-button>
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteUser(scope.row)">删除</el-button>
+            <template slot-scope="{row}">
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateUser(row)">编辑</el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteUser(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <cuForm :dialog-visible="cuDialogVisible" :cur-id="curId" @close="close" />
         <!--分页组件-->
         <el-pagination
           :current-page="1"
@@ -116,12 +116,17 @@
 </template>
 
 <script>
+import cuForm from './components/cuForm'
 import { getUsers, updateUserActive, deleteUser, deleteUsers } from '@/api/system/users'
 import { getDepartments } from '@/api/system/departments'
+import { mapGetters } from 'vuex'
 export default {
   name: 'User',
+  components: { cuForm },
   data() {
     return {
+      cuDialogVisible: false,
+      curId: null,
       form: {
         page: 1,
         size: 10,
@@ -141,6 +146,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'userId'
+    ])
+  },
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val)
@@ -151,6 +161,13 @@ export default {
     this.getDepartments()
   },
   methods: {
+    createUser() {
+      this.cuDialogVisible = true
+    },
+    updateUser(row) {
+      this.curId = row.id
+      this.cuDialogVisible = true
+    },
     // 部门Tree过滤方法
     filterNode(value, data) {
       if (!value) return true
@@ -244,6 +261,10 @@ export default {
           this.search()
         })
       })
+    },
+    close() {
+      this.cuDialogVisible = false
+      this.curId = null
     },
 
     // 分页
