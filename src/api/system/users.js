@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 新增用户
 export function createUser(data) {
   return request({
-    url: '/oauth/login/',
+    url: '/system/users/',
     method: 'post',
     data
   })
@@ -27,9 +27,9 @@ export function deleteUsers(ids) {
 }
 
 // 修改用户
-export function updateUser(data) {
+export function updateUser(id, data) {
   return request({
-    url: 'api/users/',
+    url: `/system/users/${id}/`,
     method: 'put',
     data
   })

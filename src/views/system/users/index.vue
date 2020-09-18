@@ -6,7 +6,7 @@
         <el-tree
           ref="tree"
           class="filter-tree"
-          :data="data"
+          :data="departmentsData"
           :props="defaultProps"
           :expand-on-click-node="false"
           :filter-node-method="filterNode"
@@ -30,7 +30,6 @@
           </el-form-item>
         </el-form>
         <el-button type="primary" icon="el-icon-plus" size="medium" @click="createUser()">新增</el-button>
-        <el-button type="success" icon="el-icon-edit" :disabled="multipleSelection.length===1 ? false : true" size="medium" @click="updateUser(form)">修改</el-button>
         <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteUsers(form)">删除</el-button>
         <el-table
           ref="multipleTable"
@@ -99,7 +98,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <cuForm :dialog-visible="cuDialogVisible" :cur-id="curId" @close="close" />
+        <cuForm :dialog-visible="cuDialogVisible" :departments-data="departmentsData" :cur-id="curId" @close="close" @search="search" />
         <!--分页组件-->
         <el-pagination
           :current-page="1"
@@ -125,8 +124,6 @@ export default {
   components: { cuForm },
   data() {
     return {
-      cuDialogVisible: false,
-      curId: null,
       form: {
         page: 1,
         size: 10,
@@ -139,11 +136,14 @@ export default {
       total: 0,
       multipleSelection: [], // 已选择的用户id数组
       filterText: '',
-      data: [],
+      departmentsData: [],
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      // 以下为cuForm子组件数据
+      cuDialogVisible: false,
+      curId: null
     }
   },
   computed: {
@@ -176,7 +176,7 @@ export default {
     // 获取部门Tree结构
     getDepartments() {
       getDepartments().then(res => {
-        this.data = res.data.results
+        this.departmentsData = res.data.results
       })
     },
     // 过滤部门下的用户列表
