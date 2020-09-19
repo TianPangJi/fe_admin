@@ -22,7 +22,7 @@ export function deleteRoles(ids) {
   return request({
     url: '/system/roles/',
     method: 'delete',
-    data: ids
+    data: { 'ids': ids }
   })
 }
 
@@ -32,6 +32,15 @@ export function updateRole(id, data) {
     url: `/system/roles/${id}/`,
     method: 'put',
     data
+  })
+}
+
+// 修改角色权限
+export function updateRolePermissions(id, permissions) {
+  return request({
+    url: `/system/roles/${id}/`,
+    method: 'patch',
+    data: { 'permissions': permissions }
   })
 }
 

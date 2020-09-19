@@ -22,7 +22,7 @@ export function deleteUsers(ids) {
   return request({
     url: '/system/users/',
     method: 'delete',
-    data: ids
+    data: { 'ids': ids }
   })
 }
 

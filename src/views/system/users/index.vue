@@ -29,7 +29,7 @@
             <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
           </el-form-item>
         </el-form>
-        <el-button type="primary" icon="el-icon-plus" size="medium" @click="createUser()">新增</el-button>
+        <el-button type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createUser()">新增</el-button>
         <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteUsers(form)">删除</el-button>
         <el-table
           ref="multipleTable"
@@ -98,7 +98,6 @@
             </template>
           </el-table-column>
         </el-table>
-        <cuForm :dialog-visible="cuDialogVisible" :departments-data="departmentsData" :cur-id="curId" @close="close" @search="search" />
         <!--分页组件-->
         <el-pagination
           :current-page="1"
@@ -111,6 +110,7 @@
         />
       </el-col>
     </el-row>
+    <cuForm :dialog-visible="cuDialogVisible" :departments-data="departmentsData" :cur-id="curId" @close="close" @search="search" />
   </div>
 </template>
 
@@ -235,17 +235,16 @@ export default {
       const deleteIds = []
       this.$refs.multipleTable.selection.forEach(data => deleteIds.push(data.id))
       this.multipleSelection = deleteIds
-      console.log(this.multipleSelection)
     },
 
     // 批量删除用户
     deleteUsers() {
-      this.$confirm('此操作将删除用户' + ', 是否继续？', '提示', {
+      this.$confirm('此操作将删除选中用户' + ', 是否继续？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteUsers({ 'ids': this.multipleSelection }).then(res => {
+        deleteUsers(this.multipleSelection).then(res => {
           this.$message({
             message: '删除用户成功',
             type: 'success'

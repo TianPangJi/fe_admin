@@ -22,7 +22,7 @@ export function deleteDepartments(ids) {
   return request({
     url: '/system/departments/',
     method: 'delete',
-    data: ids
+    data: { 'ids': ids }
   })
 }
 

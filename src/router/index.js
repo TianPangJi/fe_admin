@@ -109,9 +109,9 @@ export const asyncRoutes = [
         meta: { title: '用户管理', icon: 'user', noCache: true }
       },
       {
-        path: 'line',
-        component: () => import('@/views/system/users'),
-        name: 'LineChart',
+        path: 'roles',
+        component: () => import('@/views/system/roles'),
+        name: 'roles',
         meta: { title: '角色管理', icon: 'role', noCache: true }
       },
       {
