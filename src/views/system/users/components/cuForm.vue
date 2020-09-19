@@ -1,17 +1,17 @@
 <template>
-  <el-dialog :visible.sync="dialogVisible" :title="curId ? '编辑页面' : '新增页面'" width="700px" :before-close="close">
+  <el-dialog :visible.sync="dialogVisible" :title="curId ? '编辑用户' : '新增用户'" width="700px" :before-close="close">
     <el-form ref="ruleForm" label-position="left  " :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm">
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="ruleForm.username" autocomplete="off" />
+        <el-input v-model="ruleForm.username" clearable autocomplete="off" />
       </el-form-item>
       <el-form-item label="姓名" prop="name">
-        <el-input v-model="ruleForm.name" autocomplete="off" />
+        <el-input v-model="ruleForm.name" clearable autocomplete="off" />
       </el-form-item>
       <el-form-item label="手机号" prop="mobile">
-        <el-input v-model="ruleForm.mobile" autocomplete="off" />
+        <el-input v-model="ruleForm.mobile" clearable autocomplete="off" />
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input v-model="ruleForm.email" autocomplete="off" />
+        <el-input v-model="ruleForm.email" clearable autocomplete="off" />
       </el-form-item>
       <el-form-item label="部门" prop="department">
         <treeselect
@@ -120,7 +120,7 @@ export default {
         if (valid) {
           if (this.curId) {
             if (!this.ruleForm.department) {
-              this.ruleForm.department = ''
+              this.ruleForm.department = null
             }
             updateUser(this.curId, this.ruleForm).then(res => {
               this.$message({

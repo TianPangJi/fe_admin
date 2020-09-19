@@ -27,7 +27,7 @@
     <!--  底部  -->
     <div id="el-login-footer">
       <span />
-      <a href="http://www.beian.miit.gov.cn" target="_blank">个人练习项目 @ 点击查看GitHub</a>
+      <a href="https://github.com/TianPangJi" target="_blank">个人练习项目 @ 点击查看GitHub</a>
     </div>
   </div>
 </template>

@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row>
       <el-col :span="4">
-        <el-input v-model="filterText" clearable style="width:260px; margin-bottom: 20px;" prefix-icon="el-icon-search" placeholder="输入部门名称搜索" />
+        <el-input v-model="filterText" clearable style="width:90%; margin-bottom: 20px;" prefix-icon="el-icon-search" placeholder="输入部门名称搜索" />
         <el-tree
           ref="tree"
           class="filter-tree"
@@ -161,23 +161,16 @@ export default {
     this.getDepartments()
   },
   methods: {
-    createUser() {
-      this.cuDialogVisible = true
-    },
-    updateUser(row) {
-      this.curId = row.id
-      this.cuDialogVisible = true
-    },
-    // 部门Tree过滤方法
-    filterNode(value, data) {
-      if (!value) return true
-      return data.label.indexOf(value) !== -1
-    },
     // 获取部门Tree结构
     getDepartments() {
       getDepartments().then(res => {
         this.departmentsData = res.data.results
       })
+    },
+    // 部门Tree过滤方法
+    filterNode(value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
     },
     // 过滤部门下的用户列表
     handleNodeClick(data) {
@@ -262,11 +255,6 @@ export default {
         })
       })
     },
-    close() {
-      this.cuDialogVisible = false
-      this.curId = null
-    },
-
     // 分页
     handleSizeChange(val) {
       this.form.size = val
@@ -275,7 +263,20 @@ export default {
     handleCurrentChange(val) {
       this.form.page = val
       this.search()
+    },
+    // cuForm子组件
+    createUser() {
+      this.cuDialogVisible = true
+    },
+    updateUser(row) {
+      this.curId = row.id
+      this.cuDialogVisible = true
+    },
+    close() {
+      this.cuDialogVisible = false
+      this.curId = null
     }
+
   }
 
 }
