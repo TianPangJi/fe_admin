@@ -1,0 +1,156 @@
+<template>
+  <div class="app-container">
+    <el-form ref="form" :model="form" inline>
+      <el-form-item prop="search">
+        <el-input v-model="form.search" clearable style="width:300px" prefix-icon="el-icon-search" placeholder="输入权限名、描述、路径搜索" />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="success" icon="el-icon-search" size="medium" @click="search(form)">搜索</el-button>
+        <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
+      </el-form-item>
+    </el-form>
+    <el-button type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createRole()">新增</el-button>
+    <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteRoles(form)">删除</el-button>
+    <el-table
+      ref="table"
+      :data="tableData"
+      style="width: 100%;margin-bottom: 20px;"
+      row-key="id"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      @select-all="selectAllChange"
+      @selection-change="handleSelectionChange"
+      @select="selectChange"
+    >
+      <el-table-column
+        type="selection"
+        width="55"
+      />
+      <el-table-column
+        prop="name"
+        label="权限名"
+        width="180"
+      />
+      <el-table-column
+        prop="sign"
+        label="权限标识"
+        width="180"
+      />
+      <el-table-column
+        prop="path"
+        label="请求路径"
+      />
+      <el-table-column
+        prop="method"
+        label="请求方法"
+        width="100"
+      />
+      <el-table-column
+        prop="desc"
+        label="描述"
+      />
+      <el-table-column
+        fixed="right"
+        align="center"
+        label="操作"
+        width="220"
+      >
+        <template slot-scope="{row}">
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateRole(row)">编辑</el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletePermission(row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
+<script>
+import { getPermissions, deletePermission } from '@/api/system/permissions'
+export default {
+  name: 'Permissions',
+  data() {
+    return {
+      form: {
+        search: '',
+        ordering: 'id'
+      },
+      tableData: [],
+      isAllSelect: false,
+      multipleSelection: []
+    }
+  },
+  created() {
+    this.search()
+  },
+  methods: {
+    // 获取权限Tree列表/搜索功能
+    search() {
+      getPermissions(this.form).then(res => {
+        this.tableData = res.data.results
+      })
+    },
+    // 重置
+    resetForm() {
+      this.$refs.form.resetFields()
+      this.search()
+    },
+    // 删除权限
+    deletePermission(row) {
+      this.$confirm('此操作将删除权限 "' + row.name + '" 及其子权限' + ' , 是否继续？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deletePermission(row.id).then(res => {
+          this.$message({
+            message: '删除权限' + row.name + '成功',
+            type: 'success'
+          })
+          // 刷新table
+          this.search()
+        })
+      })
+    },
+    // table全选事件
+    selectAllChange(selection) {
+      // 如果选中的数目与请求到的数目相同就选中所有子节点，否则就清空
+      console.log(selection)
+      if (selection && selection.length === this.tableData.length) {
+        selection.forEach(val => {
+          this.selectChange(selection, val)
+        })
+      } else {
+        this.$refs.table.clearSelection()
+      }
+    },
+    selectChange(selection, row) {
+      // 如果selection中存在row代表是选中，否则是取消选中
+      debugger
+      if (selection.indexOf(row) !== -1) {
+        if (row.children) {
+          row.children.forEach(val => {
+            selection.push(val)
+            this.$refs.table.toggleRowSelection(val, true)
+            this.selectChange(selection, val)
+          })
+        }
+      } else {
+        this.reverseRowSelection(selection, row)
+      }
+    },
+    // 取消选择
+    reverseRowSelection(selection, data) {
+      if (data.children) {
+        data.children.forEach(val => {
+          this.$refs.table.toggleRowSelection(val, false)
+          if (val.children) {
+            this.reverseRowSelection(selection, val)
+          }
+        })
+      }
+    },
+    handleSelectionChange(val) {
+      console.log()
+    }
+
+  }
+}
+</script>

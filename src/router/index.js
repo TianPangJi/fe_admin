@@ -115,9 +115,9 @@ export const asyncRoutes = [
         meta: { title: '角色管理', icon: 'role', noCache: true }
       },
       {
-        path: 'mix-chart',
-        component: () => import('@/views/system/users'),
-        name: 'MixChart',
+        path: 'permissions',
+        component: () => import('@/views/system/permissions'),
+        name: 'permissions',
         meta: { title: '权限管理', icon: 'permission', noCache: true }
       }
     ]
