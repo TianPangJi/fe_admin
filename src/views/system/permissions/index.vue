@@ -9,8 +9,8 @@
         <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createRole()">新增</el-button>
-    <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteRoles(form)">删除</el-button>
+    <el-button type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createPermission()">新增</el-button>
+    <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deletePermissions(form)">删除</el-button>
     <el-table
       ref="table"
       :data="tableData"
@@ -55,17 +55,20 @@
         width="220"
       >
         <template slot-scope="{row}">
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateRole(row)">编辑</el-button>
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="updatePermission(row)">编辑</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletePermission(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <cuForm :dialog-visible="cuDialogVisible" :cur-id="curId" :permissions="tableData" @close="close" @search="search" />
   </div>
 </template>
 <script>
-import { getPermissions, deletePermission } from '@/api/system/permissions'
+import cuForm from './components/cuForm'
+import { getPermissions, deletePermission, deletePermissions } from '@/api/system/permissions'
 export default {
   name: 'Permissions',
+  components: { cuForm },
   data() {
     return {
       form: {
@@ -74,7 +77,10 @@ export default {
       },
       tableData: [],
       isAllSelect: false,
-      multipleSelection: []
+      multipleSelection: [],
+      // cuForm数据
+      cuDialogVisible: false,
+      curId: null
     }
   },
   created() {
@@ -109,11 +115,28 @@ export default {
         })
       })
     },
+    // 批量删除权限
+    deletePermissions() {
+      this.$confirm('此操作将删除选中权限及其子权限' + ', 是否继续？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deletePermissions(this.multipleSelection).then(res => {
+          this.$message({
+            message: '删除权限成功',
+            type: 'success'
+          })
+          // 刷新table
+          this.search()
+        })
+      })
+    },
     // table全选事件
     selectAllChange(selection) {
       // 如果选中的数目与请求到的数目相同就选中所有子节点，否则就清空
       console.log(selection)
-      if (selection && selection.length === this.tableData.length) {
+      if (selection && selection.length === this.tableData.length && selection[0].id === this.tableData[0].id) {
         selection.forEach(val => {
           this.selectChange(selection, val)
         })
@@ -121,6 +144,7 @@ export default {
         this.$refs.table.clearSelection()
       }
     },
+    // 选项框点击事件
     selectChange(selection, row) {
       // 如果selection中存在row代表是选中，否则是取消选中
       debugger
@@ -147,8 +171,23 @@ export default {
         })
       }
     },
+    // 选项改变时触发
     handleSelectionChange(val) {
-      console.log()
+      const deleteIds = []
+      this.$refs.table.selection.forEach(data => deleteIds.push(data.id))
+      this.multipleSelection = deleteIds
+    },
+    // cuForm子组件
+    createPermission() {
+      this.cuDialogVisible = true
+    },
+    updatePermission(row) {
+      this.curId = row.id
+      this.cuDialogVisible = true
+    },
+    close() {
+      this.cuDialogVisible = false
+      this.curId = null
     }
 
   }

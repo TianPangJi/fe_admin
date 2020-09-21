@@ -51,3 +51,11 @@ export function getPermission(id) {
     method: 'get'
   })
 }
+
+// 获取请求方法列表
+export function getPermissionMethods() {
+  return request({
+    url: '/system/permissions/methods/',
+    method: 'get'
+  })
+}
