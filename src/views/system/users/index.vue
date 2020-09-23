@@ -120,7 +120,7 @@ import { getUsers, updateUserActive, deleteUser, deleteUsers } from '@/api/syste
 import { getDepartments } from '@/api/system/departments'
 import { mapGetters } from 'vuex'
 export default {
-  name: 'User',
+  name: 'Users',
   components: { cuForm },
   data() {
     return {
@@ -280,9 +280,3 @@ export default {
 
 }
 </script>
-<style lang="scss" scope>
-// .el-input{
-//   width:400px
-// }
-
-</style>

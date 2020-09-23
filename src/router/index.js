@@ -129,6 +129,32 @@ export const asyncRoutes = [
     ]
   },
 
+  // 系统监控
+  {
+    path: '/monitor',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'system',
+    meta: {
+      title: '系统监控',
+      icon: 'monitor'
+    },
+    children: [
+      {
+        path: 'users',
+        component: () => import('@/views/monitor/users'),
+        name: 'users',
+        meta: { title: '在线用户', icon: 'Steve-Jobs', noCache: true }
+      },
+      {
+        path: 'users1',
+        component: () => import('@/views/system/users'),
+        name: 'users',
+        meta: { title: '用户管理', icon: 'user', noCache: true }
+      }
+    ]
+  },
+
   // icon
   {
     path: '/icon',

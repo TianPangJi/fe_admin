@@ -52,7 +52,7 @@
 import cuForm from './components/cuForm'
 import { getDepartments, deleteDepartment, deleteDepartments } from '@/api/system/departments'
 export default {
-  name: 'Permissions',
+  name: 'Departments',
   components: { cuForm },
   data() {
     return {
