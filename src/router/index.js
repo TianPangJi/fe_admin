@@ -119,6 +119,12 @@ export const asyncRoutes = [
         component: () => import('@/views/system/permissions'),
         name: 'permissions',
         meta: { title: '权限管理', icon: 'permission', noCache: true }
+      },
+      {
+        path: 'departments',
+        component: () => import('@/views/system/departments'),
+        name: 'departments',
+        meta: { title: '部门管理', icon: 'dept', noCache: true }
       }
     ]
   },
