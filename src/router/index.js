@@ -147,10 +147,10 @@ export const asyncRoutes = [
         meta: { title: '在线用户', icon: 'Steve-Jobs', noCache: true }
       },
       {
-        path: 'users1',
-        component: () => import('@/views/system/users'),
-        name: 'users',
-        meta: { title: '用户管理', icon: 'user', noCache: true }
+        path: 'service',
+        component: () => import('@/views/monitor/service'),
+        name: 'service',
+        meta: { title: '服务监控', icon: 'codeConsole', noCache: true }
       }
     ]
   },

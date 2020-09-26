@@ -15,7 +15,6 @@
           ref="multipleTable"
           :data="tableData"
           style="width: 100%"
-          @selection-change="handleSelectionChange"
         >
           <el-table-column
             type="index"
