@@ -19,7 +19,7 @@
     <el-row>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>状态</span>
+          <span style="font-weight: bold;color: #666;font-size: 18px">状态</span>
         </div>
         <el-col :span="8">
           <div class="title">CPU使用率</div>
@@ -33,32 +33,49 @@
           <div class="title">
             <el-progress type="circle" :percentage="service_data.mem.percent" />
           </div>
-          <div class="title">{{ service_data.mem.used }} / {{ service_data.mem.total }}</div>
+          <div v-if="service_data.mem.used" class="title">{{ service_data.mem.used }} / {{ service_data.mem.total }}</div>
         </el-col>
         <el-col :span="8">
           <div class="title">磁盘使用率</div>
           <div class="title">
             <el-progress type="circle" :percentage="service_data.disk.percent" />
           </div>
-          <div class="title">{{ service_data.disk.used }} / {{ service_data.disk.total }}</div>
+          <div v-if="service_data.disk.used" class="title">{{ service_data.disk.used }} / {{ service_data.disk.total }}</div>
         </el-col>
       </el-card>
     </el-row>
-    <el-row>
+    <el-row :gutter="5">
       <el-col :span="12">
-        333
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span style="font-weight: bold;color: #666;font-size: 18px">CPU使用率监控</span>
+          </div>
+          <v-chart :options="cpuInfo" />
+        </el-card>
       </el-col>
       <el-col :span="12">
-        333
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span style="font-weight: bold;color: #666;font-size: 18px">内存使用率监控</span>
+          </div>
+          <div style="width: 100%">
+            <v-chart :options="memInfo" />
+          </div>
+        </el-card>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
+import ECharts from 'vue-echarts'
+import 'echarts-gl'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/tooltip'
 import { getToken } from '@/utils/auth'
 import { getService } from '@/api/monitor/service'
 export default {
   name: 'Service',
+  components: { 'v-chart': ECharts },
   data() {
     return {
       websock: null,
@@ -87,6 +104,72 @@ export default {
         'sys': {
           'run_time': ''
         }
+      },
+      cpuInfo: {
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: []
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          max: 100,
+          interval: 20
+        },
+        series: [{
+          data: [],
+          type: 'line',
+          areaStyle: {
+            normal: {
+              color: 'rgb(32, 160, 255)' // 改变区域颜色
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#6fbae1',
+              lineStyle: {
+                color: '#6fbae1' // 改变折线颜色
+              }
+            }
+          }
+        }]
+      },
+      memInfo: {
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: []
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          max: 100,
+          interval: 20
+        },
+        series: [{
+          data: [],
+          type: 'line',
+          areaStyle: {
+            normal: {
+              color: 'rgb(32, 160, 255)' // 改变区域颜色
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#6fbae1',
+              lineStyle: {
+                color: '#6fbae1' // 改变折线颜色
+              }
+            }
+          }
+        }]
       }
     }
   },
@@ -120,15 +203,25 @@ export default {
     },
     websocketonopen() { // 连接建立之后执行send方法发送数据
       const data = { 'tonken': getToken() }
-      this.monitor = setInterval(this.websocketsend(JSON.stringify(data)), 2000)
+      this.monitor = setInterval(this.websocketsend, 2000, JSON.stringify(data))
     },
     websocketonerror() { // 连接建立失败重连
       this.initWebSocket()
     },
     websocketonmessage(e) { // 数据接收
-      const redata = JSON.parse(e.data)
-      this.service_data = redata
-      console.log(redata)
+      const data = JSON.parse(e.data)
+      this.service_data = data
+      // 添加echarts数据,且最多8个
+      if (this.cpuInfo.xAxis.data.length >= 8) {
+        this.cpuInfo.xAxis.data.shift()
+        this.memInfo.xAxis.data.shift()
+        this.cpuInfo.series[0].data.shift()
+        this.memInfo.series[0].data.shift()
+      }
+      this.cpuInfo.xAxis.data.push(data.time)
+      this.memInfo.xAxis.data.push(data.time)
+      this.cpuInfo.series[0].data.push(parseFloat(data.cpu.percent))
+      this.memInfo.series[0].data.push(parseFloat(data.mem.percent))
     },
     websocketsend(Data) { // 数据发送
       this.websock.send(Data)
@@ -150,4 +243,8 @@ export default {
     text-align: center;
     margin: 10px 0
   }
+.echarts{
+    width: 100%;
+    min-width: 400px;
+}
 </style>
