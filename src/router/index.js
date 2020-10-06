@@ -147,6 +147,12 @@ export const asyncRoutes = [
         meta: { title: '在线用户', icon: 'Steve-Jobs', noCache: true }
       },
       {
+        path: 'ip',
+        component: () => import('@/views/monitor/ip'),
+        name: 'ip',
+        meta: { title: 'IP黑名单', icon: 'ipvisits', noCache: true }
+      },
+      {
         path: 'error',
         component: () => import('@/views/monitor/error'),
         name: 'error',

@@ -45,8 +45,13 @@ service.interceptors.response.use(
   },
   error => {
     let code = 0
+    let errors = ''
+    let errorData = ''
+    debugger
     try {
       code = error.response.status
+      errors = error.response.data.errors
+      errorData = error.response.data
     } catch (e) {
       if (error.toString().indexOf('timeout')) {
         Message({
@@ -74,9 +79,8 @@ service.interceptors.response.use(
     } else if (code === 403) {
       router.push({ path: '/401' })
     } else if (code === 400) {
-      const errorMsg = error.response.data.errors
       Message({
-        message: errorMsg || '服务端错误',
+        message: errors || errorData || '服务端错误',
         type: 'error',
         duration: 3 * 1000
       })

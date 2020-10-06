@@ -78,6 +78,7 @@
 <script>
 import { getUsers } from '@/api/monitor/users'
 import { updateUserActive } from '@/api/system/users'
+import { createIp } from '@/api/monitor/ip'
 export default {
   name: 'Users',
   data() {
@@ -125,7 +126,18 @@ export default {
     },
     // 拉黑IP
     blackIP(row) {
-
+      this.$confirm('此操作将拉黑IP "' + row.ip + '" , 是否继续？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        createIp({ 'ip': row.ip }).then(res => {
+          this.$message({
+            message: '拉黑成功',
+            type: 'success'
+          })
+        })
+      })
     },
     // 分页
     handleSizeChange(val) {

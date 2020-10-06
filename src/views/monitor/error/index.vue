@@ -37,6 +37,7 @@
           <el-table-column
             prop="desc"
             label="描述"
+            show-overflow-tooltip
           />
           <el-table-column
             prop="create_time"
