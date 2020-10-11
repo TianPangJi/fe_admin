@@ -7,7 +7,7 @@
             <el-input v-model="form.search" clearable style="width:300px" prefix-icon="el-icon-search" placeholder="输入角色名、描述搜索" />
           </el-form-item>
           <el-form-item>
-            <el-button type="success" icon="el-icon-search" size="medium" @click="search(form)">搜索</el-button>
+            <el-button type="success" icon="el-icon-search" size="medium" @click="search('search')">搜索</el-button>
             <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
           </el-form-item>
         </el-form>
@@ -31,6 +31,7 @@
           <el-table
             ref="multipleTable"
             :data="tableData"
+            :row-key="getRowKeys"
             style="width: 100%"
             highlight-current-row
             @current-change="tableHandleCurrentChange"
@@ -38,6 +39,7 @@
           >
             <el-table-column
               type="selection"
+              :selectable="checkSelectTable"
               width="55"
             />
             <el-table-column
@@ -60,8 +62,8 @@
               width="220"
             >
               <template slot-scope="{row}">
-                <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateRole(row)">编辑</el-button>
-                <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRole(row)">删除</el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini" @click.native.stop="updateRole(row)">编辑</el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini" @click.native.stop="deleteRole(row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -136,7 +138,16 @@ export default {
   },
   methods: {
     // 获取角色列表/搜索功能
-    search() {
+    search(search) {
+      if (search) {
+        // 清空权限菜单部分数据
+        this.showButton = false
+        this.permissionIds = []
+        this.$refs.permissions.setCheckedKeys([])
+        this.changeDisabled(this.permissionsData, false)
+        this.step = 0
+        this.currentId = null
+      }
       getRoles(this.form).then(res => {
         this.tableData = res.data.results
         this.total = res.data.count
@@ -145,13 +156,31 @@ export default {
     // 重置
     resetForm() {
       this.$refs.form.resetFields()
-      this.search()
-      // 清空权限菜单部分数据
-      this.showButton = false
-      this.permissionIds = []
-      this.$refs.permissions.setCheckedKeys([])
-      this.step = 0
-      this.currentId = null
+      this.search('search')
+    },
+    getRowKeys(row) {
+      return row.id
+    },
+    // 获取Permissions Tree的所有ID
+    getAllPermissionDataId(array, datas) {
+      for (const index in datas) {
+        const id = datas[index].id
+        array.push(id)
+        if (datas[index].children) {
+          this.getAllPermissionDataId(array, datas[index].children)
+        }
+      }
+      return array
+    },
+    // 更改Permissions Tree的disabled属性
+    changeDisabled(data, disabled) {
+      for (let index = 0; index < data.length; index++) {
+        const children = data[index].children
+        if (children !== undefined) {
+          this.changeDisabled(children, disabled)
+        }
+        data[index].disabled = disabled
+      }
     },
     // table选择框功能的change事件
     handleSelectionChange() {
@@ -159,19 +188,31 @@ export default {
       this.$refs.multipleTable.selection.forEach(data => deleteIds.push(data.id))
       this.multipleSelection = deleteIds
     },
+    // 设置admin角色行不可勾选
+    checkSelectTable(row) {
+      return row.name !== 'admin'
+    },
     // table单选触发单选
     tableHandleCurrentChange(val) {
       if (val) {
         // 清空菜单的选中
         this.$refs.permissions.setCheckedKeys([])
-        // 保存当前的角色id
-        this.currentId = val.id
-        // 初始化默认选中的key
-        this.permissionIds = val.permissions
-        // 显示授权按钮
-        this.showButton = true
-        // 步骤显示
-        this.step = 1
+        if (val.name === 'admin') {
+          this.changeDisabled(this.permissionsData, true)
+          this.permissionIds = this.getAllPermissionDataId([], this.permissionsData)
+          this.showButton = false
+          this.step = 3
+        } else {
+          this.changeDisabled(this.permissionsData, false)
+          // 保存当前的角色id
+          this.currentId = val.id
+          // 初始化默认选中的key
+          this.permissionIds = val.permissions
+          // 显示授权按钮
+          this.showButton = true
+          // 步骤显示
+          this.step = 1
+        }
       }
     },
     // 删除角色
@@ -183,7 +224,7 @@ export default {
       }).then(() => {
         deleteRole(row.id).then(res => {
           this.$message({
-            message: '删除角色' + row.username + '成功',
+            message: '删除角色' + row.name + '成功',
             type: 'success'
           })
           // 刷新table
