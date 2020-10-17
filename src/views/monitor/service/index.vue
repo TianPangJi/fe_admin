@@ -10,6 +10,9 @@
           <span>
             IP：{{ service.ip }}
           </span>
+          <span v-if="service.data.time.time">
+            系统时间: {{ service.data.time.date }} {{ service.data.time.time }}
+          </span>
           <span>
             项目已不间断运行：{{ service_data.sys.run_time }}
           </span>
@@ -103,6 +106,10 @@ export default {
         },
         'sys': {
           'run_time': ''
+        },
+        'time': {
+          'date': '',
+          'time': ''
         }
       },
       cpuInfo: {
@@ -218,8 +225,8 @@ export default {
         this.cpuInfo.series[0].data.shift()
         this.memInfo.series[0].data.shift()
       }
-      this.cpuInfo.xAxis.data.push(data.time)
-      this.memInfo.xAxis.data.push(data.time)
+      this.cpuInfo.xAxis.data.push(data.time.time)
+      this.memInfo.xAxis.data.push(data.time.time)
       this.cpuInfo.series[0].data.push(parseFloat(data.cpu.percent))
       this.memInfo.series[0].data.push(parseFloat(data.mem.percent))
     },
