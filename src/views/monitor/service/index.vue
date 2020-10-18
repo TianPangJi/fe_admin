@@ -10,8 +10,8 @@
           <span>
             IP：{{ service.ip }}
           </span>
-          <span v-if="service.data.time.time">
-            系统时间: {{ service.data.time.date }} {{ service.data.time.time }}
+          <span v-if="service_data.time.date">
+            系统时间: {{ service_data.time.date }} {{ service_data.time.time }}
           </span>
           <span>
             项目已不间断运行：{{ service_data.sys.run_time }}
@@ -53,7 +53,7 @@
           <div slot="header" class="clearfix">
             <span style="font-weight: bold;color: #666;font-size: 18px">CPU使用率监控</span>
           </div>
-          <v-chart :options="cpuInfo" />
+          <v-chart ref="cpuLine" :options="cpuInfo" />
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -62,7 +62,7 @@
             <span style="font-weight: bold;color: #666;font-size: 18px">内存使用率监控</span>
           </div>
           <div style="width: 100%">
-            <v-chart :options="memInfo" />
+            <v-chart ref="memLine" :options="memInfo" />
           </div>
         </el-card>
       </el-col>
@@ -183,6 +183,12 @@ export default {
   created() {
     this.initWebSocket()
     this.getService()
+  },
+  mounted() {
+    window.addEventListener('resize', () => {
+      this.$refs.cpuLine.resize()
+      this.$refs.memLine.resize()
+    })
   },
   destroyed() {
     // 清除定时器

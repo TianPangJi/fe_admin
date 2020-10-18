@@ -68,7 +68,7 @@
       </el-col>
     </el-row>
     <el-dialog title="错误详情" :visible.sync="dialogTableVisible">
-      <pre>{{ errorDetails }}</pre>
+      <pre class="errorPre">{{ errorDetails }}</pre>
     </el-dialog>
   </div>
 </template>
@@ -137,6 +137,15 @@ export default {
       this.search()
     }
   }
-
 }
 </script>
+<style lang="scss" scoped>
+pre{
+  white-space:pre-wrap;
+  word-wrap: break-word
+};
+.errorPre{
+  height: 60vh;
+  overflow: auto;
+}
+</style>
