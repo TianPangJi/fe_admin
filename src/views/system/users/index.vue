@@ -93,8 +93,9 @@
             width="220"
           >
             <template slot-scope="{row}">
-              <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateUser(row)">编辑</el-button>
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteUser(row)">删除</el-button>
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateUser(row)" />
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteUser(row)" />
+              <el-button type="warning" size="mini" @click="resetPass(row)"><svg-icon icon-class="reset_password" /></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -111,17 +112,19 @@
       </el-col>
     </el-row>
     <cuForm :dialog-visible="cuDialogVisible" :departments-data="departmentsData" :cur-id="curId" @close="close" @search="search" />
+    <resetPwdForm :reset-pass-dialog-visible="resetPassDialogVisible" :reset-cur-id="resetCurId" @resetClose="resetClose" />
   </div>
 </template>
 
 <script>
 import cuForm from './components/cuForm'
+import resetPwdForm from './components/resetPwdForm'
 import { getUsers, updateUserActive, deleteUser, deleteUsers } from '@/api/system/users'
 import { getDepartments } from '@/api/system/departments'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Users',
-  components: { cuForm },
+  components: { cuForm, resetPwdForm },
   data() {
     return {
       form: {
@@ -143,7 +146,10 @@ export default {
       },
       // 以下为cuForm子组件数据
       cuDialogVisible: false,
-      curId: null
+      curId: null,
+      // 一下为resetPwdForm子组件数据
+      resetPassDialogVisible: false,
+      resetCurId: null
     }
   },
   computed: {
@@ -274,6 +280,16 @@ export default {
     close() {
       this.cuDialogVisible = false
       this.curId = null
+    },
+    //
+    // cuForm子组件
+    resetPass(row) {
+      this.resetPassDialogVisible = true
+      this.resetCurId = row.id
+    },
+    resetClose() {
+      this.resetPassDialogVisible = false
+      this.resetCurId = null
     }
 
   }

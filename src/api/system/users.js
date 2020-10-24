@@ -60,3 +60,12 @@ export function getUser(id) {
     method: 'get'
   })
 }
+
+// 重置密码
+export function resetPassword(id, data) {
+  return request({
+    url: `/system/users/reset-password/${id}/`,
+    method: 'patch',
+    data
+  })
+}
