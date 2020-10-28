@@ -167,6 +167,44 @@ export const asyncRoutes = [
     ]
   },
 
+  // 资产管理
+  {
+    path: '/cmdb',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'cmdb',
+    meta: {
+      title: '资产管理',
+      icon: 'resources'
+    },
+    children: [
+      {
+        path: 'server',
+        component: () => import('@/views/cmdb/servers'),
+        name: 'server',
+        meta: { title: '服务器', icon: 'server', noCache: true }
+      },
+      {
+        path: 'network',
+        component: () => import('@/views/monitor/ip'),
+        name: 'network',
+        meta: { title: '网络设备', icon: 'network', noCache: true }
+      },
+      {
+        path: 'storage',
+        component: () => import('@/views/monitor/error'),
+        name: 'storage',
+        meta: { title: '存储设备', icon: 'storage', noCache: true }
+      },
+      {
+        path: 'security',
+        component: () => import('@/views/monitor/service'),
+        name: 'security',
+        meta: { title: '安全设备', icon: 'security', noCache: true }
+      }
+    ]
+  },
+
   // icon
   {
     path: '/icon',

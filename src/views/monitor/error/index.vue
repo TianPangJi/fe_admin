@@ -118,8 +118,8 @@ export default {
             message: '清空成功',
             type: 'success'
           })
+          this.search()
         })
-        this.search()
       })
     },
     // 错误详情dialog显示

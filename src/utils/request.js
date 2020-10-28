@@ -47,7 +47,6 @@ service.interceptors.response.use(
     let code = 0
     let errors = ''
     let errorData = ''
-    debugger
     try {
       code = error.response.status
       errors = error.response.data.errors
@@ -84,20 +83,25 @@ service.interceptors.response.use(
         type: 'error',
         duration: 3 * 1000
       })
+    } else if (code === 404) {
+      Notification.error({
+        title: '错误',
+        message: '请求接口不存在!'
+      })
     } else if (code === 502) {
       Notification.error({
         title: '错误',
-        message: '后端服务器连接失败!'
+        message: errors || errorData || '后端服务器连接失败!'
       })
     } else if (code === 500) {
       Notification.error({
         title: '错误',
-        message: '服务端错误!'
+        message: errors || errorData || '服务端错误!'
       })
     } else {
       Notification.error({
         title: '错误',
-        message: '服务端未知错误!'
+        message: errors || errorData || '服务端未知错误!'
       })
     }
     return Promise.reject(error)
