@@ -105,25 +105,25 @@ export const asyncRoutes = [
       {
         path: 'users',
         component: () => import('@/views/system/users'),
-        name: 'users',
+        name: 'system-users',
         meta: { title: '用户管理', icon: 'user', noCache: true }
       },
       {
         path: 'roles',
         component: () => import('@/views/system/roles'),
-        name: 'roles',
+        name: 'system-roles',
         meta: { title: '角色管理', icon: 'role', noCache: true }
       },
       {
         path: 'permissions',
         component: () => import('@/views/system/permissions'),
-        name: 'permissions',
+        name: 'system-permissions',
         meta: { title: '权限管理', icon: 'permission', noCache: true }
       },
       {
         path: 'departments',
         component: () => import('@/views/system/departments'),
-        name: 'departments',
+        name: 'system-departments',
         meta: { title: '部门管理', icon: 'dept', noCache: true }
       }
     ]
@@ -134,7 +134,7 @@ export const asyncRoutes = [
     path: '/monitor',
     component: Layout,
     redirect: 'noRedirect',
-    name: 'system',
+    name: 'monitor',
     meta: {
       title: '系统监控',
       icon: 'monitor'
@@ -143,25 +143,25 @@ export const asyncRoutes = [
       {
         path: 'users',
         component: () => import('@/views/monitor/users'),
-        name: 'users',
+        name: 'monitor-users',
         meta: { title: '在线用户', icon: 'Steve-Jobs', noCache: true }
       },
       {
         path: 'ip',
         component: () => import('@/views/monitor/ip'),
-        name: 'ip',
+        name: 'monitor-ip',
         meta: { title: 'IP黑名单', icon: 'ipvisits', noCache: true }
       },
       {
         path: 'error',
         component: () => import('@/views/monitor/error'),
-        name: 'error',
+        name: 'monitor-error',
         meta: { title: '错误日志', icon: 'error', noCache: true }
       },
       {
         path: 'service',
         component: () => import('@/views/monitor/service'),
-        name: 'service',
+        name: 'monitor-service',
         meta: { title: '服务监控', icon: 'codeConsole', noCache: true }
       }
     ]
@@ -181,25 +181,25 @@ export const asyncRoutes = [
       {
         path: 'server',
         component: () => import('@/views/cmdb/servers'),
-        name: 'server',
+        name: 'cmdb-server',
         meta: { title: '服务器', icon: 'server', noCache: true }
       },
       {
         path: 'network',
         component: () => import('@/views/monitor/ip'),
-        name: 'network',
+        name: 'cmdb-network',
         meta: { title: '网络设备', icon: 'network', noCache: true }
       },
       {
         path: 'storage',
         component: () => import('@/views/monitor/error'),
-        name: 'storage',
+        name: 'cmdb-storage',
         meta: { title: '存储设备', icon: 'storage', noCache: true }
       },
       {
         path: 'security',
         component: () => import('@/views/monitor/service'),
-        name: 'security',
+        name: 'cmdb-security',
         meta: { title: '安全设备', icon: 'security', noCache: true }
       }
     ]

@@ -7,7 +7,7 @@
       <el-form-item prop="asset_status">
         <el-select v-model="form.asset_status" style="width:120px" clearable placeholder="状态">
           <el-option
-            v-for="item in options"
+            v-for="item in statusOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -26,9 +26,7 @@
       :data="tableData"
       style="width: 100%; margin-bottom: 20px;"
       row-key="id"
-      @select-all="selectAllChange"
       @selection-change="handleSelectionChange"
-      @select="selectChange"
     >
       <el-table-column
         type="selection"
@@ -56,7 +54,7 @@
               <span>{{ props.row.server.model }}</span>
             </el-form-item>
             <el-form-item label="用户">
-              <span v-for="(item,index) in props.row.server.accounts" :key="item.id">{{ index+1 }}、{{ item.username }}/{{ item.password }}/{{ item.port }} </span>
+              <span v-for="(item,index) in props.row.server.accounts" :key="item.id">{{ index+1 }}、{{ item.username }}/{{ item.password }}/{{ item.port }}   </span>
             </el-form-item>
           </el-form>
         </template>
@@ -64,14 +62,18 @@
       <el-table-column
         label="服务器名称"
         prop="name"
+        min-width="100"
+        show-overflow-tooltip
       />
       <el-table-column
         label="设备编号"
         prop="sn"
+        show-overflow-tooltip
       />
       <el-table-column
         label="类型"
         prop="server.server_type_display"
+        show-overflow-tooltip
       >
         <template slot-scope="{row}">
           <el-tag v-if="row.server.server_type==='pm'" effect="plain">{{ row.server.server_type_display }}</el-tag>
@@ -81,9 +83,12 @@
       <el-table-column
         label="系统"
         prop="server.server_system_type_display"
+        show-overflow-tooltip
       />
       <el-table-column
         label="服务器状态"
+        min-width="100"
+        show-overflow-tooltip
       >
         <template slot-scope="{row}">
           <el-tag v-if="row.asset_status===0">{{ row.asset_status_display }}</el-tag>
@@ -96,14 +101,17 @@
       <el-table-column
         label="IP"
         prop="manage_ip"
+        show-overflow-tooltip
       />
       <el-table-column
         label="管理员"
         prop="admin_display"
+        show-overflow-tooltip
       />
       <el-table-column
         label="到期时间"
         prop="expire_day"
+        show-overflow-tooltip
       />
       <el-table-column
         fixed="right"
@@ -117,13 +125,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <cuForm :dialog-visible="cuDialogVisible" :cur-id="curId" :permissions="tableData" @close="close" @search="search" />
+    <cuForm :dialog-visible="cuDialogVisible" :cur-id="curId" :status-options="statusOptions" @close="close" @search="search" />
   </div>
 </template>
 <script>
 import cuForm from './components/cuForm'
 import { getServers, deleteServer, deleteServers } from '@/api/cmdb/servers'
-import { getStatus } from '@/api/cmdb/assets'
+import { getAssetsStatus } from '@/api/cmdb/assets'
 export default {
   name: 'Permissions',
   components: { cuForm },
@@ -135,7 +143,7 @@ export default {
         asset_status: ''
       },
       tableData: [],
-      options: [],
+      statusOptions: [],
       multipleSelection: [],
       // cuForm数据
       cuDialogVisible: false,
@@ -144,7 +152,7 @@ export default {
   },
   created() {
     this.search()
-    this.getStatus()
+    this.getAssetsStatus()
   },
   methods: {
     // 获取服务器列表/搜索功能
@@ -154,9 +162,9 @@ export default {
       })
     },
     // 获取服务器资产状态列表
-    getStatus() {
-      getStatus().then(res => {
-        this.options = res.data.results
+    getAssetsStatus() {
+      getAssetsStatus().then(res => {
+        this.statusOptions = res.data.results
       })
     },
     // 重置

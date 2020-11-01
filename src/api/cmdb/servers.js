@@ -53,7 +53,7 @@ export function getServer(id) {
 }
 
 // 获取服务器类型列表
-export function getType() {
+export function getServerType() {
   return request({
     url: '/cmdb/servers/type/',
     method: 'get'
@@ -61,7 +61,7 @@ export function getType() {
 }
 
 // 获取服务器系统类型列表
-export function getSystemType() {
+export function getServerSystemType() {
   return request({
     url: '/cmdb/servers/system-type/',
     method: 'get'
