@@ -125,6 +125,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--分页组件-->
+    <el-pagination
+      :current-page="1"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="10"
+      :total="total"
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
     <cuForm :dialog-visible="cuDialogVisible" :cur-id="curId" :status-options="statusOptions" @close="close" @search="search" />
   </div>
 </template>
@@ -138,11 +148,14 @@ export default {
   data() {
     return {
       form: {
+        page: 1,
+        size: 10,
         search: '',
         ordering: '',
         asset_status: ''
       },
       tableData: [],
+      total: 0,
       statusOptions: [],
       multipleSelection: [],
       // cuForm数据
@@ -159,6 +172,7 @@ export default {
     search() {
       getServers(this.form).then(res => {
         this.tableData = res.data.results
+        this.total = res.data.count
       })
     },
     // 获取服务器资产状态列表
@@ -223,6 +237,15 @@ export default {
     close() {
       this.cuDialogVisible = false
       this.curId = null
+    },
+    // 分页
+    handleSizeChange(val) {
+      this.form.size = val
+      this.search()
+    },
+    handleCurrentChange(val) {
+      this.form.page = val
+      this.search()
     }
 
   }
