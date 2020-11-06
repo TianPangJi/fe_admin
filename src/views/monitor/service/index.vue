@@ -185,9 +185,11 @@ export default {
     this.getService()
   },
   mounted() {
+    const cpuLine = this.$refs.cpuLine
+    const memLine = this.$refs.memLine
     window.addEventListener('resize', () => {
-      this.$refs.cpuLine.resize()
-      this.$refs.memLine.resize()
+      cpuLine.resize()
+      memLine.resize()
     })
   },
   destroyed() {

@@ -15,7 +15,7 @@
         <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteRoles(form)">删除</el-button>
       </el-col>
       <el-col :span="7">
-        <el-steps :active="step" finish-status="success" simple style="margin-top: 20px; padding:10px 2%">
+        <el-steps :active="step" finish-status="success" simple style="margin-top: 20px; padding:20px 2%">
           <el-step title="点击角色" />
           <el-step title="分配权限" />
           <el-step title="点击授权" />
