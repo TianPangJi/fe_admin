@@ -78,7 +78,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: () => import('@/views/profile/index'),
+        component: () => import('@/views/information/index'),
         name: 'Profile',
         meta: { title: '个人中心', icon: 'user', noCache: true }
       }
@@ -201,6 +201,40 @@ export const asyncRoutes = [
         component: () => import('@/views/monitor/service'),
         name: 'cmdb-security',
         meta: { title: '安全设备', icon: 'security', noCache: true }
+      }
+    ]
+  },
+
+  // 系统工具
+  {
+    path: '/tool',
+    component: Layout,
+    redirect: 'noRedirect',
+    alwaysShow: true,
+    name: 'tool',
+    meta: {
+      title: '系统工具',
+      icon: 'sys-tools'
+    },
+    children: [
+      {
+        path: 'swagger',
+        component: () => import('@/views/tool/swagger'),
+        name: 'tool-swagger',
+        meta: { title: '系统接口', icon: 'swagger', noCache: true }
+      }
+
+    ]
+  },
+
+  // git外链
+  {
+    path: '/git-link',
+    component: Layout,
+    children: [
+      {
+        path: 'https://github.com/TianPangJi/drf_admin',
+        meta: { title: 'Git', icon: 'github' }
       }
     ]
   },

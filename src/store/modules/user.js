@@ -9,7 +9,9 @@ const state = {
   username: '',
   email: '',
   avatar: '',
-  permissions: []
+  permissions: [],
+  department: '',
+  mobile: ''
 }
 
 const mutations = {
@@ -33,6 +35,12 @@ const mutations = {
   },
   SET_PERMISSIONS: (state, permissions) => {
     state.permissions = permissions
+  },
+  SET_DEPARTMENT: (state, department) => {
+    state.department = department
+  },
+  SET_MOBILE: (state, mobile) => {
+    state.mobile = mobile
   }
 }
 
@@ -60,13 +68,15 @@ const actions = {
         if (!data) {
           reject('验证失败，请重新登录')
         }
-        const { id, username, name, avatar, email, permissions } = data
+        const { id, username, name, avatar, email, permissions, department, mobile } = data
         commit('SET_USERID', id)
         commit('SET_NAME', name)
         commit('SET_USERNAME', username)
         commit('SET_EMAIL', email)
         commit('SET_AVATAR', avatar)
         commit('SET_PERMISSIONS', permissions)
+        commit('SET_DEPARTMENT', department)
+        commit('SET_MOBILE', mobile)
         resolve(data)
       }).catch(error => {
         reject(error)

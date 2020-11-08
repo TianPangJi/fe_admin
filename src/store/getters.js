@@ -11,6 +11,8 @@ const getters = {
   email: state => state.user.email,
   avatar: state => state.user.avatar,
   permissions: state => state.user.permissions,
+  department: state => state.user.department,
+  mobile: state => state.user.mobile,
   permission_routes: state => state.permission.routes,
   errorLogs: state => state.errorLog.logs
 }
