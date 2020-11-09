@@ -43,15 +43,15 @@
           </div>
           <div>
             <el-form ref="form" :rules="rules" :model="form" label-width="80px">
-              <el-form-item label="姓名">
+              <el-form-item label="姓名" prop="name">
                 <el-input v-model="form.name" style="width: 40%" />
                 <span style="color: #C0C0C0;margin-left: 10px;">用户真实姓名或昵称</span>
               </el-form-item>
-              <el-form-item label="手机号">
+              <el-form-item label="手机号" prop="mobile">
                 <el-input v-model="form.mobile" style="width: 40%" />
                 <span style="color: #C0C0C0;margin-left: 10px;">手机号可用于登录使用</span>
               </el-form-item>
-              <el-form-item label="邮箱">
+              <el-form-item label="邮箱" prop="email">
                 <el-input v-model="form.email" style="width: 40%" />
               </el-form-item>
               <el-form-item>
@@ -85,14 +85,13 @@ export default {
       form: {},
       rules: {
         name: [
-          { required: false, message: '请输入用户昵称', trigger: 'blur' },
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
         ],
         email: [
-          { required: false, validator: validateEMail, trigger: 'blur' }
+          { validator: validateEMail, trigger: 'blur' }
         ],
         mobile: [
-          { required: false, validator: validatePhone, trigger: 'blur' }
+          { validator: validatePhone, trigger: 'blur' }
         ]
       },
       updateAvatarApi: process.env.VUE_APP_BASE_API + '/information/change-avatar/'
