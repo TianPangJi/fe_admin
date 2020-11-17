@@ -4,7 +4,7 @@
       <el-col>
         <el-form ref="form" :model="form" inline>
           <el-form-item prop="search">
-            <el-input v-model="form.search" clearable style="width:300px" prefix-icon="el-icon-search" placeholder="输入用户名搜索" />
+            <el-input v-model="form.search" clearable style="width:300px" prefix-icon="el-icon-search" placeholder="输入用户名或IP搜索" />
           </el-form-item>
           <el-form-item>
             <el-button type="success" icon="el-icon-search" size="medium" @click="search(form)">搜索</el-button>
@@ -31,12 +31,12 @@
           <el-table-column
             prop="ip"
             label="登录IP"
-            width="180"
+            width="130"
           />
           <el-table-column
             prop="browser"
             label="浏览器"
-            width="220"
+            width="180"
           />
           <el-table-column
             prop="os"
@@ -46,7 +46,7 @@
           <el-table-column
             prop="last_time"
             label="最后操作时间"
-            width="220"
+            width="180"
           />
           <el-table-column
             fixed="right"
