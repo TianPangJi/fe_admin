@@ -36,6 +36,16 @@
         width="180"
       />
       <el-table-column
+        prop="menu"
+        label="是否为菜单"
+        width="120"
+      >
+        <template slot-scope="{row}">
+          <el-tag v-if="row.menu">是</el-tag>
+          <el-tag v-else type="warning">否</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="path"
         label="请求路径"
       />

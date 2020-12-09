@@ -125,6 +125,12 @@ export const asyncRoutes = [
         component: () => import('@/views/system/departments'),
         name: 'system-departments',
         meta: { title: '部门管理', icon: 'dept', noCache: true }
+      },
+      {
+        path: 'jobs',
+        component: () => import('@/views/system/jobs'),
+        name: 'system-jobs',
+        meta: { title: '任务调度', icon: 'task -2', noCache: true }
       }
     ]
   },
