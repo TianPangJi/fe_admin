@@ -14,7 +14,7 @@
           inactive-text="否"
         />
       </el-form-item>
-      <template v-if="ruleForm.menu">
+      <template v-if="ruleForm.menu===false">
         <el-form-item label="请求方法" prop="method">
           <el-select v-model="ruleForm.method" clearable placeholder="选择请求方法">
             <el-option

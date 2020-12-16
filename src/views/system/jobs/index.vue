@@ -12,6 +12,7 @@
           </el-form-item>
         </el-form>
         <el-button type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createJob()">新增</el-button>
+        <el-button type="info" icon="el-icon-notebook-1" size="medium" @click="showFunctionsDialog()">函数清单</el-button>
         <el-button type="danger" icon="el-icon-delete" size="medium" @click="deleteJobs()">清除任务</el-button>
       </el-col>
     </el-row>
@@ -28,6 +29,7 @@
           >
             <el-table-column
               type="index"
+              label="序号"
               width="50"
             />
             <el-table-column
@@ -66,13 +68,11 @@
             >
               <template slot-scope="{row}">
                 <el-tooltip content="历史" placement="top">
-                  <el-button type="info" icon="el-icon-message" size="mini" circle />
+                  <el-button type="info" icon="el-icon-message" size="mini" circle @click="executionDialog(row)" />
                 </el-tooltip>
                 <el-button v-if="row.next_run_time" type="warning" icon="el-icon-video-pause" size="mini" circle @click="updateJob(row,'false')" />
                 <el-button v-else type="success" icon="el-icon-video-play" size="mini" circle @click="updateJob(row,'true')" />
                 <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="deleteJob(row)" />
-                <!-- <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateIp(row)">编辑</el-button>
-                <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteIp(row)">删除</el-button> -->
               </template>
             </el-table-column>
           </el-table>
@@ -90,14 +90,18 @@
       </el-col>
     </el-row>
     <cuForm :dialog-visible="cuDialogVisible" @close="close" @search="search" />
+    <executionDialog :execution-dialog-visible="executionDialogVisible" :job-i-d="jobID" @executionDialogClose="executionDialogClose" />
+    <functionsDialog :function-dialog-visible="functionDialogVisible" @functionDialogClose="functionDialogClose" />
   </div>
 </template>
 <script>
 import cuForm from './components/cuForm'
+import executionDialog from './components/executionDialog'
+import functionsDialog from './components/functionsDialog'
 import { getJobs, updateJob, deleteJob, deleteJobs } from '@/api/system/jobs'
 export default {
   name: 'Roles',
-  components: { cuForm },
+  components: { cuForm, executionDialog, functionsDialog },
   data() {
     return {
       form: {
@@ -108,7 +112,12 @@ export default {
       tableData: [],
       total: 0,
       // cuForm数据
-      cuDialogVisible: false
+      cuDialogVisible: false,
+      // executionDialog数据
+      executionDialogVisible: false,
+      jobID: '',
+      // functionDialog数据
+      functionDialogVisible: false
     }
   },
   created() {
@@ -187,6 +196,20 @@ export default {
     },
     close() {
       this.cuDialogVisible = false
+    },
+    executionDialog(row) {
+      this.executionDialogVisible = true
+      this.jobID = row.id
+    },
+    executionDialogClose() {
+      this.executionDialogVisible = false
+      this.jobID = ''
+    },
+    showFunctionsDialog(row) {
+      this.functionDialogVisible = true
+    },
+    functionDialogClose() {
+      this.functionDialogVisible = false
     }
   }
 }

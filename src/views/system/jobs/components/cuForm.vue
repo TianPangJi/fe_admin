@@ -1,22 +1,27 @@
 <template>
   <el-dialog :visible.sync="dialogVisible" title="新增调度任务" width="700px" :before-close="close">
-    <el-form ref="ruleForm" label-position="left  " :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm">
+    <el-form ref="ruleForm" label-position="left" :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm">
       <el-form-item label="函数名称" prop="name">
         <el-select
           v-model="ruleForm.name"
           clearable
           filterable
           remote
-          placeholder="请输入调度函数名称"
+          placeholder="请输入调度函数名称或功能描述"
           :remote-method="getJobFunction"
           :loading="loading"
         >
           <el-option
-            v-for="item in adminOptions"
-            :key="item.id"
-            :label="item.username"
-            :value="item.id"
-          />
+            v-for="item in functionOptions"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name"
+          >
+            <el-tooltip placement="right">
+              <div slot="content">{{ item.desc }}</div>
+              <span style="float:left">{{ item.name }}</span>
+            </el-tooltip>
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="Cron表达式" prop="cron">
@@ -30,7 +35,7 @@
   </el-dialog>
 </template>
 <script>
-import { getIp, updateIp, createIp } from '@/api/monitor/ip'
+import { getJobFunctions, createJob } from '@/api/system/jobs'
 export default {
   name: 'CuForm',
   props: {
@@ -47,21 +52,14 @@ export default {
   data() {
     return {
       ruleForm: {
-        ip: ''
+        name: '',
+        cron: ''
       },
+      functionOptions: {},
+      loading: false,
       rules: {
-        ip: [{ required: true, trigger: 'blur', message: 'IP不能为空' }]
-      }
-    }
-  },
-  watch: {
-    dialogVisible(v) {
-      if (v) {
-        if (this.curId) {
-          getIp(this.curId).then(res => {
-            this.ruleForm = res.data
-          })
-        }
+        name: [{ required: true, trigger: 'blur', message: '函数名不能为空' }],
+        cron: [{ required: true, trigger: 'blur', message: 'Cron表达式不能为空' }]
       }
     }
   },
@@ -74,30 +72,29 @@ export default {
       this.close()
       this.$emit('search')
     },
+    // 获取调度函数列表
+    getJobFunction(query) {
+      if (query !== '') {
+        this.loading = true
+        getJobFunctions(query).then(res => {
+          this.functionOptions = res.data.results
+          this.loading = false
+        })
+      } else {
+        this.functionOptions = []
+      }
+    },
     // 提交表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.curId) {
-            if (!this.ruleForm.department) {
-              this.ruleForm.department = null
-            }
-            updateIp(this.curId, this.ruleForm).then(res => {
-              this.$message({
-                message: '修改成功',
-                type: 'success'
-              })
-              this.search()
+          createJob(this.ruleForm).then(res => {
+            this.$message({
+              message: '新增成功',
+              type: 'success'
             })
-          } else {
-            createIp(this.ruleForm).then(res => {
-              this.$message({
-                message: '新增成功',
-                type: 'success'
-              })
-              this.search()
-            })
-          }
+            this.search()
+          })
         } else {
           console.log('error submit!!')
           return false

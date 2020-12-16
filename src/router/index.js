@@ -159,6 +159,12 @@ export const asyncRoutes = [
         meta: { title: 'IP黑名单', icon: 'ipvisits', noCache: true }
       },
       {
+        path: 'crud',
+        component: () => import('@/views/monitor/crud'),
+        name: 'monitor-crud',
+        meta: { title: 'crud日志', icon: 'log', noCache: true }
+      },
+      {
         path: 'error',
         component: () => import('@/views/monitor/error'),
         name: 'monitor-error',

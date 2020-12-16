@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogVisible" :title="curId ? '编辑服务器' : '新增服务器'" width="710px" :before-close="close">
+  <el-dialog :visible.sync="dialogVisible" :title="curId ? '编辑服务器' : '新增服务器'" width="720px" :before-close="close">
     <el-form ref="ruleForm" inline label-position="left" :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm">
       <el-card shadow="never">
         <el-form-item label="服务器名称" prop="name">
@@ -47,11 +47,9 @@
             :picker-options="pickerOptions"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
-            class="expire_day"
           />
         </el-form-item>
         <el-form-item label="所在机柜" prop="cabinet">
-          <!-- <el-input v-model="ruleForm.cabinet" clearable /> -->
           <el-cascader
             v-model="ruleForm.cabinet"
             :options="cabinetOptions"
@@ -326,8 +324,5 @@ export default {
   }
 .el-sub-button{
  margin-left: 112px;
-}
-.expire_day{
-  width: 200px;
 }
 </style>
