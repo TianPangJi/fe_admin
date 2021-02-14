@@ -108,6 +108,8 @@ export default {
   methods: {
     close() {
       this.$refs.ruleForm.resetFields()
+      this.ruleForm.method = ''
+      this.ruleForm.path = ''
       this.$emit('close')
     },
     search() {
@@ -127,7 +129,7 @@ export default {
             if (!this.ruleForm.pid) {
               this.ruleForm.pid = null
             }
-            if (this.ruleForm.menu === false) {
+            if (this.ruleForm.menu === true) {
               this.ruleForm.method = ''
               this.ruleForm.path = ''
             }
