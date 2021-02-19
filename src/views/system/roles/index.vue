@@ -80,7 +80,7 @@
         </el-card>
       </el-col>
       <el-col :span="7">
-        <el-card class="box-card" style="margin-left:10px">
+        <el-card class="permissions-box-card" style="margin-left:10px">
           <div slot="header" class="clearfix">
             <span>权限分配</span>
             <el-button :disabled="!showButton" type="primary" style="float: right" icon="el-icon-check" size="medium" @click="authorize()">授权</el-button>
@@ -265,9 +265,42 @@ export default {
       })
     },
     // tree权限节点被点击时的回调
-    handleCheckClick() {
+    handleCheckClick(currentObj, treeStatus) {
       if (this.currentId) {
         this.step = 2
+      }
+      // 用于：父子节点严格互不关联时，父节点勾选变化时通知子节点同步变化，实现单向关联。
+      const selected = treeStatus.checkedKeys.indexOf(currentObj.id) // -1未选中
+      // 选中
+      if (selected !== -1) {
+        // 子节点只要被选中父节点就被选中
+        this.selectedParent(currentObj)
+        // 统一处理子节点为相同的勾选状态
+        this.uniteChildSame(currentObj, true)
+      } else {
+        // 未选中 处理子节点全部未选中
+        if (currentObj.children !== undefined) {
+          if (currentObj.children.length !== 0) {
+            this.uniteChildSame(currentObj, false)
+          }
+        }
+      }
+    },
+    // 统一处理子节点为相同的勾选状态
+    uniteChildSame(treeList, isSelected) {
+      this.$refs.permissions.setChecked(treeList.id, isSelected)
+      if (treeList.children !== undefined) {
+        for (let i = 0; i < treeList.children.length; i++) {
+          this.uniteChildSame(treeList.children[i], isSelected)
+        }
+      }
+    },
+    // 统一处理父节点为选中
+    selectedParent(currentObj) {
+      const currentNode = this.$refs.permissions.getNode(currentObj)
+      if (currentNode.parent.key !== undefined) {
+        this.$refs.permissions.setChecked(currentNode.parent, true)
+        this.selectedParent(currentNode.parent)
       }
     },
     // 角色授权
@@ -297,3 +330,14 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.permissions-box-card{
+  ::v-deep{
+    .el-card__body{
+      max-height: 400px;
+      overflow-y: auto;
+    }
+  }
+}
+
+</style>

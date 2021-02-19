@@ -157,7 +157,6 @@ export default {
     // 选项框点击事件
     selectChange(selection, row) {
       // 如果selection中存在row代表是选中，否则是取消选中
-      debugger
       if (selection.indexOf(row) !== -1) {
         if (row.children) {
           row.children.forEach(val => {
