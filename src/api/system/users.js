@@ -69,3 +69,11 @@ export function resetPassword(id, data) {
     data
   })
 }
+
+// 获取用户权限列表
+export function getUserPermissions(id) {
+  return request({
+    url: `/system/users/${id}/permissions/`,
+    method: 'get'
+  })
+}

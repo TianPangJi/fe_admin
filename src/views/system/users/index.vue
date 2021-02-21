@@ -90,12 +90,17 @@
             fixed="right"
             align="center"
             label="操作"
-            width="220"
+            width="230"
           >
             <template slot-scope="{row}">
               <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateUser(row)" />
               <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteUser(row)" />
-              <el-button type="warning" size="mini" @click="resetPass(row)"><svg-icon icon-class="reset_password" /></el-button>
+              <el-tooltip content="用户权限" placement="top">
+                <el-button type="warning" icon="el-icon-user-solid" size="mini" @click="userPermissions(row)" />
+              </el-tooltip>
+              <el-tooltip content="重置密码" placement="top">
+                <el-button type="warning" size="mini" @click="resetPass(row)"><svg-icon icon-class="reset_password" /></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -112,19 +117,21 @@
       </el-col>
     </el-row>
     <cuForm :dialog-visible="cuDialogVisible" :departments-data="departmentsData" :cur-id="curId" @close="close" @search="search" />
-    <resetPwdForm :reset-pass-dialog-visible="resetPassDialogVisible" :reset-cur-id="resetCurId" @resetClose="resetClose" />
+    <resetPwdForm :reset-pass-dialog-visible="resetPassDialogVisible" :reset-cur-id="curId" @resetClose="resetClose" />
+    <permissionsDialog :permissions-dialog-visible="permissionsDialogVisible" :user-id="curId" @permissionsClose="permissionsClose" />
   </div>
 </template>
 
 <script>
 import cuForm from './components/cuForm'
 import resetPwdForm from './components/resetPwdForm'
+import permissionsDialog from './components/permissionsDialog'
 import { getUsers, updateUserActive, deleteUser, deleteUsers } from '@/api/system/users'
 import { getDepartments } from '@/api/system/departments'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Users',
-  components: { cuForm, resetPwdForm },
+  components: { cuForm, resetPwdForm, permissionsDialog },
   data() {
     return {
       form: {
@@ -147,9 +154,10 @@ export default {
       // 以下为cuForm子组件数据
       cuDialogVisible: false,
       curId: null,
-      // 一下为resetPwdForm子组件数据
+      // 以下为resetPwdForm子组件数据
       resetPassDialogVisible: false,
-      resetCurId: null
+      // permissionsDialog子组件
+      permissionsDialogVisible: false
     }
   },
   computed: {
@@ -281,17 +289,24 @@ export default {
       this.cuDialogVisible = false
       this.curId = null
     },
-    //
-    // cuForm子组件
+    // 重置密码子组件
     resetPass(row) {
       this.resetPassDialogVisible = true
-      this.resetCurId = row.id
+      this.curId = row.id
     },
     resetClose() {
       this.resetPassDialogVisible = false
-      this.resetCurId = null
+      this.curId = null
+    },
+    // 用户权限组件
+    userPermissions(row) {
+      this.permissionsDialogVisible = true
+      this.curId = row.id
+    },
+    permissionsClose() {
+      this.permissionsDialogVisible = false
+      this.curId = null
     }
-
   }
 
 }
