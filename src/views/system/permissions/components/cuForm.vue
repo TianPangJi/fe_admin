@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogVisible" :title="curId ? '编辑权限' : '新增权限'" width="700px" :before-close="close">
+  <el-dialog :close-on-click-modal="false" :visible.sync="dialogVisible" :title="curId ? '编辑权限' : '新增权限'" width="700px" :before-close="close">
     <el-form ref="ruleForm" label-position="left  " :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm">
       <el-form-item label="权限名" prop="name">
         <el-input v-model="ruleForm.name" clearable />

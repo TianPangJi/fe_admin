@@ -9,7 +9,7 @@
           <el-form-item>
             <el-button type="success" icon="el-icon-search" size="medium" @click="search(form)">搜索</el-button>
             <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
-            <el-button type="danger" icon="el-icon-delete" size="medium" @click="deleteLogs()">清空日志</el-button>
+            <el-button v-permission="['admin','monitor-error-clear']" type="danger" icon="el-icon-delete" size="medium" @click="deleteLogs()">清空日志</el-button>
           </el-form-item>
         </el-form>
         <el-table

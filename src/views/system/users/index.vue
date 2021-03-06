@@ -29,8 +29,8 @@
             <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
           </el-form-item>
         </el-form>
-        <el-button type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createUser()">新增</el-button>
-        <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteUsers(form)">删除</el-button>
+        <el-button v-permission="['admin','system-users-add']" type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createUser()">新增</el-button>
+        <el-button v-permission="['admin','system-users-mdel']" type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteUsers(form)">删除</el-button>
         <el-table
           ref="multipleTable"
           :data="tableData"
@@ -77,7 +77,7 @@
               <!-- v-model="row.is_active" -->
               <el-switch
                 v-model="row.is_active"
-                :disabled="row.id === userId"
+                :disabled="!checkPermission(['admin','system-users-lock'])||row.id === userId"
                 :active-value="true"
                 :inactive-value="false"
                 active-color="#13ce66"
@@ -93,13 +93,13 @@
             width="230"
           >
             <template slot-scope="{row}">
-              <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateUser(row)" />
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteUser(row)" />
+              <el-button v-permission="['admin','system-users-update']" type="primary" icon="el-icon-edit" size="mini" @click="updateUser(row)" />
+              <el-button v-permission="['admin','system-users-del']" type="danger" icon="el-icon-delete" size="mini" @click="deleteUser(row)" />
               <el-tooltip content="用户权限" placement="top">
-                <el-button type="warning" icon="el-icon-user-solid" size="mini" @click="userPermissions(row)" />
+                <el-button v-permission="['admin','system-users-permissions']" type="warning" icon="el-icon-user-solid" size="mini" @click="userPermissions(row)" />
               </el-tooltip>
               <el-tooltip content="重置密码" placement="top">
-                <el-button type="warning" size="mini" @click="resetPass(row)"><svg-icon icon-class="reset_password" /></el-button>
+                <el-button v-permission="['admin','system-users-reset-pwd']" type="warning" size="mini" @click="resetPass(row)"><svg-icon icon-class="reset_password" /></el-button>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import checkPermission from '@/utils/permission'
 import cuForm from './components/cuForm'
 import resetPwdForm from './components/resetPwdForm'
 import permissionsDialog from './components/permissionsDialog'
@@ -175,6 +176,7 @@ export default {
     this.getDepartments()
   },
   methods: {
+    checkPermission,
     // 获取部门Tree结构
     getDepartments() {
       getDepartments().then(res => {

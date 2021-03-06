@@ -55,8 +55,8 @@
             width="220"
           >
             <template slot-scope="{row}">
-              <el-button type="primary" icon="el-icon-edit" size="mini" @click="lockUser(row)">锁定</el-button>
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="blackIP(row)">拉黑IP</el-button>
+              <el-button v-permission="['admin','monitor-users-lock']" type="primary" icon="el-icon-edit" size="mini" @click="lockUser(row)">锁定</el-button>
+              <el-button v-permission="['admin','monitor-users-black-ip']" type="danger" icon="el-icon-delete" size="mini" @click="blackIP(row)">拉黑IP</el-button>
             </template>
           </el-table-column>
         </el-table>

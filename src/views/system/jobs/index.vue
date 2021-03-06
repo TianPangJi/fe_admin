@@ -11,9 +11,9 @@
             <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
           </el-form-item>
         </el-form>
-        <el-button type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createJob()">新增</el-button>
+        <el-button v-permission="['admin','system-jobs-add']" type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createJob()">新增</el-button>
         <el-button type="info" icon="el-icon-notebook-1" size="medium" @click="showFunctionsDialog()">函数清单</el-button>
-        <el-button type="danger" icon="el-icon-delete" size="medium" @click="deleteJobs()">清除任务</el-button>
+        <el-button v-permission="['admin','system-jobs-clear']" type="danger" icon="el-icon-delete" size="medium" @click="deleteJobs()">清除任务</el-button>
       </el-col>
     </el-row>
     <el-row>
@@ -68,11 +68,11 @@
             >
               <template slot-scope="{row}">
                 <el-tooltip content="历史" placement="top">
-                  <el-button type="info" icon="el-icon-message" size="mini" circle @click="executionDialog(row)" />
+                  <el-button v-permission="['admin','system-jobs-history']" type="info" icon="el-icon-message" size="mini" circle @click="executionDialog(row)" />
                 </el-tooltip>
-                <el-button v-if="row.next_run_time" type="warning" icon="el-icon-video-pause" size="mini" circle @click="updateJob(row,'false')" />
-                <el-button v-else type="success" icon="el-icon-video-play" size="mini" circle @click="updateJob(row,'true')" />
-                <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="deleteJob(row)" />
+                <el-button v-if="row.next_run_time" v-permission="['admin','system-jobs-ps']" type="warning" icon="el-icon-video-pause" size="mini" circle @click="updateJob(row,'false')" />
+                <el-button v-else v-permission="['admin','system-jobs-ps']" type="success" icon="el-icon-video-play" size="mini" circle @click="updateJob(row,'true')" />
+                <el-button v-permission="['admin','system-jobs-del']" type="danger" icon="el-icon-delete" size="mini" circle @click="deleteJob(row)" />
               </template>
             </el-table-column>
           </el-table>

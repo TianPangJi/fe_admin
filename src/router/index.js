@@ -96,8 +96,10 @@ export const asyncRoutes = [
     path: '/system',
     component: Layout,
     redirect: 'noRedirect',
+    alwaysShow: true,
     name: 'system',
     meta: {
+      permissions: ['admin', 'system'],
       title: '系统管理',
       icon: 'system'
     },
@@ -106,31 +108,31 @@ export const asyncRoutes = [
         path: 'users',
         component: () => import('@/views/system/users'),
         name: 'system-users',
-        meta: { title: '用户管理', icon: 'user', noCache: true }
+        meta: { permissions: ['admin', 'system-users'], title: '用户管理', icon: 'user', noCache: true }
       },
       {
         path: 'roles',
         component: () => import('@/views/system/roles'),
         name: 'system-roles',
-        meta: { title: '角色管理', icon: 'role', noCache: true }
+        meta: { permissions: ['admin', 'system-roles'], title: '角色管理', icon: 'role', noCache: true }
       },
       {
         path: 'permissions',
         component: () => import('@/views/system/permissions'),
         name: 'system-permissions',
-        meta: { title: '权限管理', icon: 'permission', noCache: true }
+        meta: { permissions: ['admin', 'system-permissions'], title: '权限管理', icon: 'permission', noCache: true }
       },
       {
         path: 'departments',
         component: () => import('@/views/system/departments'),
         name: 'system-departments',
-        meta: { title: '部门管理', icon: 'dept', noCache: true }
+        meta: { permissions: ['admin', 'system-departments'], title: '部门管理', icon: 'dept', noCache: true }
       },
       {
         path: 'jobs',
         component: () => import('@/views/system/jobs'),
         name: 'system-jobs',
-        meta: { title: '任务调度', icon: 'task -2', noCache: true }
+        meta: { permissions: ['admin', 'system-jobs'], title: '任务调度', icon: 'task -2', noCache: true }
       }
     ]
   },
@@ -140,8 +142,10 @@ export const asyncRoutes = [
     path: '/monitor',
     component: Layout,
     redirect: 'noRedirect',
+    alwaysShow: true,
     name: 'monitor',
     meta: {
+      permissions: ['admin', 'monitor'],
       title: '系统监控',
       icon: 'monitor'
     },
@@ -150,31 +154,31 @@ export const asyncRoutes = [
         path: 'users',
         component: () => import('@/views/monitor/users'),
         name: 'monitor-users',
-        meta: { title: '在线用户', icon: 'Steve-Jobs', noCache: true }
+        meta: { permissions: ['admin', 'monitor-users'], title: '在线用户', icon: 'Steve-Jobs', noCache: true }
       },
       {
         path: 'ip',
         component: () => import('@/views/monitor/ip'),
         name: 'monitor-ip',
-        meta: { title: 'IP黑名单', icon: 'ipvisits', noCache: true }
+        meta: { permissions: ['admin', 'monitor-ip'], title: 'IP黑名单', icon: 'ipvisits', noCache: true }
       },
-      {
-        path: 'crud',
-        component: () => import('@/views/monitor/crud'),
-        name: 'monitor-crud',
-        meta: { title: 'crud日志', icon: 'log', noCache: true }
-      },
+      // {
+      //   path: 'crud',
+      //   component: () => import('@/views/monitor/crud'),
+      //   name: 'monitor-crud',
+      //   meta: { permissions: ['admin', 'monitor-crud'], title: 'crud日志', icon: 'log', noCache: true }
+      // },
       {
         path: 'error',
         component: () => import('@/views/monitor/error'),
         name: 'monitor-error',
-        meta: { title: '错误日志', icon: 'error', noCache: true }
+        meta: { permissions: ['admin', 'monitor-error'], title: '错误日志', icon: 'error', noCache: true }
       },
       {
         path: 'service',
         component: () => import('@/views/monitor/service'),
         name: 'monitor-service',
-        meta: { title: '服务监控', icon: 'codeConsole', noCache: true }
+        meta: { permissions: ['admin', 'monitor-service'], title: '服务监控', icon: 'codeConsole', noCache: true }
       }
     ]
   },
@@ -184,8 +188,10 @@ export const asyncRoutes = [
     path: '/cmdb',
     component: Layout,
     redirect: 'noRedirect',
+    alwaysShow: true,
     name: 'cmdb',
     meta: {
+      permissions: ['admin', 'cmdb'],
       title: '资产管理',
       icon: 'resources'
     },
@@ -193,27 +199,27 @@ export const asyncRoutes = [
       {
         path: 'server',
         component: () => import('@/views/cmdb/servers'),
-        name: 'cmdb-server',
-        meta: { title: '服务器', icon: 'server', noCache: true }
-      },
-      {
-        path: 'network',
-        component: () => import('@/views/monitor/ip'),
-        name: 'cmdb-network',
-        meta: { title: '网络设备', icon: 'network', noCache: true }
-      },
-      {
-        path: 'storage',
-        component: () => import('@/views/monitor/error'),
-        name: 'cmdb-storage',
-        meta: { title: '存储设备', icon: 'storage', noCache: true }
-      },
-      {
-        path: 'security',
-        component: () => import('@/views/monitor/service'),
-        name: 'cmdb-security',
-        meta: { title: '安全设备', icon: 'security', noCache: true }
+        name: 'cmdb-servers',
+        meta: { permissions: ['admin', 'cmdb-servers'], title: '服务器', icon: 'server', noCache: true }
       }
+      // {
+      //   path: 'network',
+      //   component: () => import('@/views/monitor/ip'),
+      //   name: 'cmdb-network',
+      //   meta: { title: '网络设备', icon: 'network', noCache: true }
+      // },
+      // {
+      //   path: 'storage',
+      //   component: () => import('@/views/monitor/error'),
+      //   name: 'cmdb-storage',
+      //   meta: { title: '存储设备', icon: 'storage', noCache: true }
+      // },
+      // {
+      //   path: 'security',
+      //   component: () => import('@/views/monitor/service'),
+      //   name: 'cmdb-security',
+      //   meta: { title: '安全设备', icon: 'security', noCache: true }
+      // }
     ]
   },
 
@@ -225,6 +231,7 @@ export const asyncRoutes = [
     alwaysShow: true,
     name: 'tool',
     meta: {
+      permissions: ['admin', 'tool'],
       title: '系统工具',
       icon: 'sys-tools'
     },
@@ -233,7 +240,7 @@ export const asyncRoutes = [
         path: 'swagger',
         component: () => import('@/views/tool/swagger'),
         name: 'tool-swagger',
-        meta: { title: '系统接口', icon: 'swagger', noCache: true }
+        meta: { permissions: ['admin', 'tool-swagger'], title: '系统接口', icon: 'swagger', noCache: true }
       }
 
     ]

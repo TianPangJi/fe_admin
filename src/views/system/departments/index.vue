@@ -9,8 +9,8 @@
         <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createDepartment()">新增</el-button>
-    <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteDepartments(form)">删除</el-button>
+    <el-button v-permission="['admin','system-departments-add']" type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createDepartment()">新增</el-button>
+    <el-button v-permission="['admin','system-departments-mdel']" type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deleteDepartments(form)">删除</el-button>
     <el-table
       ref="table"
       :data="tableData"
@@ -40,8 +40,8 @@
         width="220"
       >
         <template slot-scope="{row}">
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateDepartment(row)">编辑</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteDepartment(row)">删除</el-button>
+          <el-button v-permission="['admin','system-departments-update']" type="primary" icon="el-icon-edit" size="mini" @click="updateDepartment(row)">编辑</el-button>
+          <el-button v-permission="['admin','system-departments-del']" type="danger" icon="el-icon-delete" size="mini" @click="deleteDepartment(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

@@ -9,8 +9,8 @@
         <el-button type="warning" icon="el-icon-refresh-left" size="medium" @click="resetForm()">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createPermission()">新增</el-button>
-    <el-button type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deletePermissions(form)">删除</el-button>
+    <el-button v-permission="['admin','system-permissions-add']" type="primary" style="margin-bottom:20px" icon="el-icon-plus" size="medium" @click="createPermission()">新增</el-button>
+    <el-button v-permission="['admin','system-permissions-mdel']" type="danger" icon="el-icon-delete" :disabled="multipleSelection.length ? false : true" size="medium" @click="deletePermissions(form)">删除</el-button>
     <el-table
       ref="table"
       :data="tableData"
@@ -29,11 +29,13 @@
         prop="name"
         label="权限名"
         width="180"
+        show-overflow-tooltip
       />
       <el-table-column
         prop="sign"
         label="权限标识"
         width="180"
+        show-overflow-tooltip
       />
       <el-table-column
         prop="menu"
@@ -57,6 +59,8 @@
       <el-table-column
         prop="desc"
         label="描述"
+        width="100"
+        show-overflow-tooltip
       />
       <el-table-column
         fixed="right"
@@ -65,8 +69,8 @@
         width="220"
       >
         <template slot-scope="{row}">
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="updatePermission(row)">编辑</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletePermission(row)">删除</el-button>
+          <el-button v-permission="['admin','system-permissions-update']" type="primary" icon="el-icon-edit" size="mini" @click="updatePermission(row)">编辑</el-button>
+          <el-button v-permission="['admin','system-permissions-del']" type="danger" icon="el-icon-delete" size="mini" @click="deletePermission(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
