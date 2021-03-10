@@ -76,7 +76,7 @@ export default {
     getJobFunction(query) {
       if (query !== '') {
         this.loading = true
-        getJobFunctions(query).then(res => {
+        getJobFunctions({ 'search': query }).then(res => {
           this.functionOptions = res.data.results
           this.loading = false
         })
